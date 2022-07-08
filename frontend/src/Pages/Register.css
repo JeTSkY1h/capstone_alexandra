@@ -1,0 +1,12 @@
+.content-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.register-wrapper {
+    max-width: 440px;
+}
+
+.register-btn {
+    width: 100%;
+}

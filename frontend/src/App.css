@@ -1,0 +1,21 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.btn:hover {
+  background-color: #295656;
+  color: hsl(0, 0%, 100%);
+}
+
+.btn {
+  border-radius: 5px;
+  padding: 1rem;
+  color: hsl(0, 0%, 90%);
+  min-height: 2rem;
+  background-color: #305050;
+  border: none;
+}

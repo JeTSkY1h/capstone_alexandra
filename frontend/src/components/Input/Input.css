@@ -1,0 +1,31 @@
+
+.my-input-wrapper {
+    height: 60px;
+    width: 100%;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+    position: relative;
+    margin: 0.5rem 0 0.5rem 0
+}
+
+.my-input-wrapper input {
+    height: 100%;
+    box-sizing: border-box;
+    width: 100%;
+    font-size: 16px;
+    padding: 16px 0 16px 16px;
+    border: none;
+    outline: 0;
+}
+
+.my-input-wrapper label {
+    color: #999999;
+    font-size: 16px;
+    position: absolute;
+    transform: translate(8px, 16px) scale(1);
+    transition: all 0.2s ease-in;
+}
+
+.my-input-wrapper label.active{
+    transform: translate(2px,2px) scale(0.7);
+}
