@@ -1,7 +1,7 @@
-package com.example.demo.security;
+package com.github.JeTSkY1h.security;
 
-import com.example.demo.user.MyUser;
-import com.example.demo.user.MyUserService;
+import com.github.JeTSkY1h.user.MyUser;
+import com.github.JeTSkY1h.user.MyUserService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

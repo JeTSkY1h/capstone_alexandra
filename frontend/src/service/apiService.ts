@@ -1,10 +1,14 @@
-import axios from "axios";
-import { LoginData } from "./models";
+import axios, {AxiosResponse} from "axios";
+import {Book, LoginData} from "./models";
 
 let requestConfig = {
     headers: {
         Authorization: `Bearer ${localStorage.getItem("jwt-alexandra")}`
     }
+}
+
+export function getBooks(){
+    return axios.get("api/book", requestConfig).then((res: AxiosResponse<Book[]>)=>res.data);
 }
 
 export function login(user: LoginData){

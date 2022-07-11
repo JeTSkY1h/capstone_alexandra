@@ -1,4 +1,4 @@
-package com.example.demo.security;
+package com.github.JeTSkY1h.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +24,7 @@ public class SecurityConfig  {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/user", "/api/auth").permitAll()
                 .antMatchers(HttpMethod.GET, "/*", "/index*", "/static/**", "/*.js", "/*.json").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/book/refresh").hasRole("admin")
                 .antMatchers("/**").authenticated()
                 .and()
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

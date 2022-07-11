@@ -1,26 +1,27 @@
 import { useEffect, useState } from "react"
 import Nav from "../components/Nav/Nav";
-import { getLogedInUsername } from "../service/apiService"
+import Books from "../components/Books/Books";
+import { getBooks } from "../service/apiService"
+import { Book } from "../service/models";
+import "./Main.css"
 
 export default function Main() {
     
-    const [username, setUsername] = useState("");
+    const [books, setBooks] = useState<Array<Book>>();
     const [err, setErr] = useState("");
 
-
-
     useEffect(()=>{
-        getLogedInUsername().then(data => {
-            console.log(data);
-            setUsername(data);
-        }).catch((e)=>setErr(e));
+        getBooks().then(data=>setBooks(data)).catch(e=>setErr(e))
     },[])
 
     return(
         <>
             <Nav/>
-            <div>
-                {username}
+            <div className={"main"}>
+                {books ?  
+                <Books books={books}/> :
+                 err ? <p>Da ist etwas schief gelaufen.</p> :
+                 <div> LOADING... </div>}
             </div>
 
         </>
