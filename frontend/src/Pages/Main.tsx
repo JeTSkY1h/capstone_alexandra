@@ -3,6 +3,7 @@ import Nav from "../components/Nav/Nav";
 import Books from "../components/Books/Books";
 import { getBooks } from "../service/apiService"
 import { Book } from "../service/models";
+import "./Main.css"
 
 export default function Main() {
     
@@ -16,7 +17,7 @@ export default function Main() {
     return(
         <>
             <Nav/>
-            <div>
+            <div className={"main"}>
                 {books ?  
                 <Books books={books}/> :
                  err ? <p>Da ist etwas schief gelaufen.</p> :

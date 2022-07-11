@@ -6,11 +6,14 @@ interface BooksProps {
 }
 
 export default function Books(props: BooksProps){
+
     return (
         <>
-            {props.books.forEach(book=>{
-                return <BookComp book={book}/>
-            })}
+            <div>
+                {props.books.map(book=>{
+                    return <BookComp book={book}/>
+                })}
+            </div>
         </>
         
     )

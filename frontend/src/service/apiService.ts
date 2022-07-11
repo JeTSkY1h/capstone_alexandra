@@ -1,5 +1,5 @@
-import axios from "axios";
-import { LoginData } from "./models";
+import axios, {AxiosResponse} from "axios";
+import {Book, LoginData} from "./models";
 
 let requestConfig = {
     headers: {
@@ -8,7 +8,7 @@ let requestConfig = {
 }
 
 export function getBooks(){
-    return axios.get("api/book", requestConfig).then(res=>res.data);
+    return axios.get("api/book", requestConfig).then((res: AxiosResponse<Book[]>)=>res.data);
 }
 
 export function login(user: LoginData){

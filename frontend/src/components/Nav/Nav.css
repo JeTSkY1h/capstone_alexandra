@@ -1,18 +1,16 @@
 nav {
+    height: 80px;
     color: white;
-    display: block;
     box-sizing: border-box;
     padding: 0.5rem;
     display: flex;
     justify-content: space-between;
     width: 100%;
     position: absolute;
-    top: 0px;
+    top: 0;
     z-index: 10;
     background: rgba(0,0,0,0.5);
 }
-
-
 
 .login-action {
     float: right;

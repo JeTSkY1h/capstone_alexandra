@@ -27,6 +27,7 @@ public class BookController {
 
     @GetMapping("/refresh")
     void refreshBooklist(){
+        System.out.println("test");
         bookService.refresh();
     }
     @GetMapping("/{id}")
