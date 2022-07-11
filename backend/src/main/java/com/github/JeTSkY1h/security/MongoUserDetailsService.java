@@ -1,6 +1,6 @@
-package com.example.demo.security;
+package com.github.JeTSkY1h.security;
 
-import com.example.demo.user.MyUserRepo;
+import com.github.JeTSkY1h.user.MyUserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

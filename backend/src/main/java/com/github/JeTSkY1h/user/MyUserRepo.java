@@ -1,4 +1,4 @@
-package com.example.demo.user;
+package com.github.JeTSkY1h.user;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

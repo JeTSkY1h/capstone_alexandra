@@ -1,4 +1,4 @@
-package com.example.demo.security;
+package com.github.JeTSkY1h.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

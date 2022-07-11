@@ -1,13 +1,10 @@
-package com.example.demo.user;
+package com.github.JeTSkY1h.user;
 
-import com.example.demo.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController

@@ -1,10 +1,7 @@
-package com.example.demo.book;
+package com.github.JeTSkY1h.book;
 
 
 import lombok.RequiredArgsConstructor;
-import nl.siegmann.epublib.domain.Book;
-import nl.siegmann.epublib.domain.Resource;
-import nl.siegmann.epublib.domain.Spine;
 import nl.siegmann.epublib.domain.SpineReference;
 import nl.siegmann.epublib.epub.EpubReader;
 import org.jsoup.Jsoup;
@@ -28,25 +25,17 @@ public class BookController {
 
     EpubReader epubReader = new EpubReader();
 
-
-
+    @GetMapping("/refresh")
+    void refreshBooklist(){
+        bookService.refresh();
+    }
     @GetMapping("/{id}")
-    ResponseEntity<Book>  getBook(@PathVariable String id) {
+    ResponseEntity<com.github.JeTSkY1h.book.Book>  getBook(@PathVariable String id) {
         return ResponseEntity.of( bookService.getById(id) );
     }
 
     @GetMapping()
-    ResponseEntity<String> test(){
-        try {
-            Book book = epubReader.readEpub(new FileInputStream("backend/harrypotter.epub"));
-            SpineReference spineReference = book.getSpine().getSpineReferences().get(45);
-            String xhtml = new String(spineReference.getResource().getData());
-            String text = Jsoup.parse(xhtml).text();
-            return ResponseEntity.ok(xhtml);
-        } catch(Exception e) {
-            System.out.println(e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-
+    ResponseEntity<List<Book>> test(){
+        return ResponseEntity.ok(bookService.getBooks());
     }
 }
