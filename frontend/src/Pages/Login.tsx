@@ -1,4 +1,3 @@
-import { checkPrimeSync } from "crypto";
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "../components/Input/Input";
