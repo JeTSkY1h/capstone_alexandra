@@ -1,5 +1,7 @@
 import { Book } from "../../service/models"
 import "./BookComp.css"
+import {useEffect, useState} from "react";
+import {getCover} from "../../service/apiService";
 
 interface BookProps {
     book: Book;
@@ -7,12 +9,19 @@ interface BookProps {
 
 export default function BookComp(props: BookProps){
 
+    const [cover, setCover] = useState("");
 
+    useEffect(()=>{
+        getCover(props.book.id).then(res=>{
+                let image = URL.createObjectURL(res.data);
+                setCover(image);
+        });
+    },[])
 
     return (
         <div className="book-card">
             <div className="cover-img-wrapper">
-                <img src={props.book.coverPath} alt="book Cover"/>
+                <img src={cover} alt={"Buch Cover"}/>
             </div>
             <div className={"book-card-info-wrapper"}>
                 <div>

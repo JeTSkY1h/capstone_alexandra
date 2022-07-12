@@ -15,7 +15,7 @@ public class BookServiceTest {
     BookService bookService = new BookService(bookRepo, bookpath);
 
     @Test
-    void shouldAddBooks() {
+    void shouldAddBooks(){
         List<Book> books =  bookService.refresh();
         Mockito.verify(bookRepo).saveAll(books);
     }

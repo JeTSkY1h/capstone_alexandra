@@ -1,13 +1,14 @@
 package com.github.JeTSkY1h.book;
 
 import nl.siegmann.epublib.epub.EpubReader;
+import nl.siegmann.epublib.util.IOUtil;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.*;
 import java.util.*;
 @Service
 public class BookService {
@@ -30,7 +31,7 @@ public class BookService {
         return bookRepo.findAll();
     }
 
-    public List<Book> refresh() {
+    public List<Book> refresh(){
         List<File> books;
         File f = new File(path);
         books = Arrays.stream(f.listFiles()).filter(bookFile->bookFile.getAbsolutePath().endsWith(".epub")).toList();
@@ -56,5 +57,12 @@ public class BookService {
        }
         bookRepo.saveAll(res);
         return res;
+    }
+
+    public byte[] getCoverByID(String id) throws IOException {
+        Book book = getById(id).orElseThrow();
+        System.out.println(book);
+        InputStream in = new BufferedInputStream(new FileInputStream(book.getCoverPath()));
+        return IOUtil.toByteArray(in);
     }
 }

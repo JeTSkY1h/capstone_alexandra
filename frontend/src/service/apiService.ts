@@ -7,6 +7,15 @@ let requestConfig = {
     }
 }
 
+export function getCover(id: string){
+    return axios.get("/api/book/cover/"+ id,
+        {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("jwt-alexandra")}`
+            }, responseType: "blob"
+        })
+}
+
 export function getBooks(){
     return axios.get("api/book", requestConfig).then((res: AxiosResponse<Book[]>)=>res.data);
 }
