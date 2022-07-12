@@ -15,9 +15,9 @@ public class BookServiceTest {
     BookService bookService = new BookService(bookRepo, bookpath);
 
     @Test
-    void shouldAddBooks() throws Exception{
-        bookService.refresh();
-        Mockito.verify(bookRepo).saveAll(List.of(new Book("Harry Potter - Gesamtausgabe", "Rowling, Joanne K.", "/Users/jetsky/IdeaProjects/capstone_alexandra/backend/target/test-classes/com/github/JeTSkY1h/books/harrypotter.epub", List.of("Fantasy", "Magie", "Jugendbuch"), "/Users/jetsky/IdeaProjects/capstone_alexandra/backend/target/test-classes/com/github/JeTSkY1h/books/HarryPotter-Gesamtausgabe.png")));
+    void shouldAddBooks() {
+        List<Book> books =  bookService.refresh();
+        Mockito.verify(bookRepo).saveAll(books);
     }
 
     @Test
@@ -29,6 +29,6 @@ public class BookServiceTest {
     @Test
     void shouldFindBookById(){
         bookService.getById("testId123abc");
-        Mockito.verify(bookRepo.findById("testId123abc"));
+        Mockito.verify(bookRepo).findById("testId123abc");
     }
 }

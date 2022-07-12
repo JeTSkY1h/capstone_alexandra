@@ -33,7 +33,7 @@ public class BookService {
     public List<Book> refresh() {
         List<File> books;
         File f = new File(path);
-        books = Arrays.asList(f.listFiles()).stream().filter(bookFile->bookFile.getAbsolutePath().endsWith(".epub")).toList();
+        books = Arrays.stream(f.listFiles()).filter(bookFile->bookFile.getAbsolutePath().endsWith(".epub")).toList();
         List<Book> res = new ArrayList<>();
        if(books != null) {
            for (File bookFile : books) {
@@ -54,6 +54,7 @@ public class BookService {
                }
            }
        }
-       return bookRepo.saveAll(res);
+        bookRepo.saveAll(res);
+        return res;
     }
 }
