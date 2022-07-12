@@ -16,6 +16,10 @@ export function getCover(id: string){
         })
 }
 
+export function getBook(id: string){
+    return axios.get("/api/book/" + id, requestConfig).then(res=>res.data)
+}
+
 export function getBooks(){
     return axios.get("api/book", requestConfig).then((res: AxiosResponse<Book[]>)=>res.data);
 }
