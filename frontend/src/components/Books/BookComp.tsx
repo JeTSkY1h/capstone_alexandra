@@ -16,7 +16,7 @@ export default function BookComp(props: BookProps){
                 let image = URL.createObjectURL(res.data);
                 setCover(image);
         });
-    },[])
+    },[props])
 
     return (
         <div className="book-card">
