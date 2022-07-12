@@ -1,3 +1,7 @@
+.books {
+    display: flex;
+}
+
 .book-card {
     color: white;
     margin: 1rem;

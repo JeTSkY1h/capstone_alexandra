@@ -9,7 +9,7 @@ export default function Books(props: BooksProps){
 
     return (
         <>
-            <div>
+            <div className="books">
                 {props.books.map(book=>{
                     return <BookComp book={book}/>
                 })}

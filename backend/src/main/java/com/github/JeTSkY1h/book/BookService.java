@@ -41,7 +41,7 @@ public class BookService {
                    nl.siegmann.epublib.domain.Book book = epubReader.readEpub(fIn);
                    Book bookRes = new Book();
                    BufferedImage buffCoverImg = ImageIO.read(book.getCoverImage().getInputStream());
-                   File outputFile = new File(path +"/"+ book.getTitle().replace(" ", "") + ".png");
+                   File outputFile = new File(path +"/"+ book.getTitle().replaceAll("[-+/\\.:'*;,]", "") + ".png");
                    ImageIO.write(buffCoverImg, "png", outputFile);
                    bookRes.setCoverPath(outputFile.getAbsolutePath());
                    bookRes.setAuthor(book.getMetadata().getAuthors().get(0).toString());

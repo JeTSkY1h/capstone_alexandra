@@ -22,7 +22,7 @@ public class AlexandraIntegrationTest {
     void AlexandraIntegrationtest(){
         var newUser = new LoginData("testUser", "testPassword");
         //create User
-        ResponseEntity<LoginResponse> createUserResponse = restTemplate.postForEntity(" /api/user/", newUser, LoginResponse.class);
+        ResponseEntity<LoginResponse> createUserResponse = restTemplate.postForEntity("/api/user", newUser, LoginResponse.class);
         Assertions.assertThat(createUserResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         //failed Login
@@ -30,7 +30,7 @@ public class AlexandraIntegrationTest {
         Assertions.assertThat(failedLoginResponse.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
 
         //login
-        ResponseEntity<LoginResponse> loginResponse = restTemplate.postForEntity("/api/login", new LoginData("testUser", "testPassword"), LoginResponse.class);
+        ResponseEntity<LoginResponse> loginResponse = restTemplate.postForEntity("/api/auth", new LoginData("testUser", "testPassword"), LoginResponse.class);
         Assertions.assertThat(loginResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         String jwt = loginResponse.getBody().getToken();
 
