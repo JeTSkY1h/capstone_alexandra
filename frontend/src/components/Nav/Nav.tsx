@@ -1,13 +1,11 @@
 
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import "./Nav.css"
 import LoginComp from "./LoginComp/LoginComp";
 
-export default function Nav(){
-    
-    const nav = useNavigate();
 
-    
+export default function Nav(){
+
     return (
         <nav>
             <div className="nav-logo-wrapper">
@@ -15,7 +13,6 @@ export default function Nav(){
                     <div className="logo"><h1>Alexandra</h1></div>
                 </Link>
             </div>
-
             <LoginComp/>
         </nav>
     )

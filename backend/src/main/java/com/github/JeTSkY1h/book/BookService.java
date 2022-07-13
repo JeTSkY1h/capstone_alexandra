@@ -3,6 +3,7 @@ package com.github.JeTSkY1h.book;
 import nl.siegmann.epublib.domain.Resource;
 import nl.siegmann.epublib.domain.SpineReference;
 import nl.siegmann.epublib.domain.TOCReference;
+import nl.siegmann.epublib.domain.TitledResourceReference;
 import nl.siegmann.epublib.epub.EpubReader;
 import nl.siegmann.epublib.util.IOUtil;
 import org.jsoup.Jsoup;
@@ -38,7 +39,6 @@ public class BookService {
         File f = new File(path);
         books = Arrays.stream(f.listFiles()).filter(bookFile->bookFile.getAbsolutePath().endsWith(".epub")).toList();
         List<Book> res = new ArrayList<>();
-       if(books != null) {
            for (File bookFile : books) {
                try (FileInputStream fIn = new FileInputStream(bookFile.getPath())) {
                    nl.siegmann.epublib.domain.Book book = epubReader.readEpub(fIn);
@@ -56,7 +56,6 @@ public class BookService {
                    System.err.println(e.getMessage());
                }
            }
-       }
         bookRepo.saveAll(res);
         return res;
     }
@@ -73,7 +72,7 @@ public class BookService {
         try (FileInputStream fIn = new FileInputStream(book.getFilePath())) {
             nl.siegmann.epublib.domain.Book epubBook = epubReader.readEpub(fIn);
             List<TOCReference> resources = epubBook.getTableOfContents().getTocReferences();
-            return resources.stream().map(resource -> resource.getTitle()).toList();
+            return resources.stream().map(TitledResourceReference::getTitle).toList();
         }
     }
 
@@ -82,9 +81,7 @@ public class BookService {
         try(FileInputStream fIn = new FileInputStream(book.getFilePath())) {
             nl.siegmann.epublib.domain.Book ebupBook = epubReader.readEpub(fIn);
             List< SpineReference> refrences = ebupBook.getSpine().getSpineReferences();
-            String xhtml = new String (refrences.get(chapter).getResource().getData());
-            String text = Jsoup.parse(xhtml).text();
-            return text;
+            return  new String (refrences.get(chapter).getResource().getData());
         } catch (Exception e) {
             return "Es gab einen Fehler Beim Laden des Kapitels.";
         }

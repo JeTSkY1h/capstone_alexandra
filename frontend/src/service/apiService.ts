@@ -7,6 +7,14 @@ let requestConfig = {
     }
 }
 
+export function getChapters(id: string){
+    return axios.get("/api/book/" + id + "/chapter", requestConfig).then(res=>res.data)
+}
+
+export function getChapter(id: string, chapter: number){
+    return axios.get(`/api/book/${id}/chapter/${chapter}`, requestConfig).then(res=>res.data)
+}
+
 export function getCover(id: string){
     return axios.get("/api/book/cover/"+ id,
         {

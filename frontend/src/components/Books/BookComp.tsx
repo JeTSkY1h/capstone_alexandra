@@ -28,23 +28,13 @@ export default function BookComp(props: BookProps){
                 </div>
                 <div className={"book-card-info-wrapper"}>
                     <div>
-                        <h1>Title</h1>
-                        <p>{props.book.title.length >= 40 ? props.book.title.slice(0,35) + "...": props.book.title}</p>
+                        <h1>{props.book.title.length >= 40 ? props.book.title.slice(0,35) + "...": props.book.title}</h1>
                     </div>
-                    <div>
-                        <h1>Author</h1>
-                        <p>{props.book.author}</p>
-                    </div>
-                    <div>
-                        <h1>Genre</h1>
-                        {props.book.genre.filter((genre,i)=> i < 2).map(genre=><p> {genre} </p>)}
-                    </div>
-
                 </div>
 
                 <Link to={"/reader/" + props.book.id}>
                     <div>
-                        test
+                        Open Reader
                     </div>
                 </Link>
             </div>
