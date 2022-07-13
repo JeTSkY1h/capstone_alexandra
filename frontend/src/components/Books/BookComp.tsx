@@ -38,6 +38,7 @@ export default function BookComp(props: BookProps){
                         <h1>Genre</h1>
                         {props.book.genre.filter((genre,i)=> i < 2).map(genre=><p> {genre} </p>)}
                     </div>
+
                 </div>
             </div>
         </NavLink>
