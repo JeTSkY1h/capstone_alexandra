@@ -1,9 +1,13 @@
+.books {
+    display: flex;
+}
+
 .book-card {
     color: white;
     margin: 1rem;
     background-color: #656565;
     width: 120px;
-    height: 248px;
+    height: 300px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }
@@ -13,7 +17,7 @@
 }
 
 .cover-img-wrapper {
-    height: 120px;
+    height: 180px;
 }
 
 .cover-img-wrapper img {

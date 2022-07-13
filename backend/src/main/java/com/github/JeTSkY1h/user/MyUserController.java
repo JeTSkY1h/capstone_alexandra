@@ -18,6 +18,11 @@ public class MyUserController {
        return ResponseEntity.ok(myUserService.createNewUser(newUser));
     }
 
+    @PutMapping("/roles")
+    ResponseEntity<Object> giveAdmin(@RequestBody MyUser newAdmin){
+        return ResponseEntity.ok(myUserService.giveAdmin(newAdmin));
+    }
+
     @GetMapping
     ResponseEntity<String>getUser(Principal principal){
         return ResponseEntity.of(Optional.of(myUserService.findByUsername(principal.getName()).get().getId()));

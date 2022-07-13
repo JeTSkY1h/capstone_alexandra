@@ -35,4 +35,11 @@ public class MyUserService {
     public Optional<MyUser> findByUsername(String username){
         return myUserRepo.findByUsername(username);
     }
+
+    public Object giveAdmin(MyUser newAdmin) {
+        List<String> currRoles = newAdmin.getRoles();
+        currRoles.add("admin");
+        newAdmin.setRoles(currRoles);
+        return myUserRepo.save(newAdmin);
+    }
 }
