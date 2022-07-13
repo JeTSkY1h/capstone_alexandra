@@ -13,7 +13,7 @@ export default function Landing(){
         if(localStorage.getItem("jwt-alexandra")) {
             nav("/main")
         }
-    },[])
+    },[nav])
 
 
     const handleSubmit = (e: FormEvent) => {
