@@ -10,7 +10,7 @@ import java.util.List;
 @Document(collection = "User")
 public class MyUser {
     @Id
-    String Id;
+    String id;
     String username;
     String password;
     List<String> roles;

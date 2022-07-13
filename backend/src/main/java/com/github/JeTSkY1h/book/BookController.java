@@ -21,12 +21,16 @@ import java.util.List;
 public class BookController {
     private final BookService bookService;
 
-    EpubReader epubReader = new EpubReader();
 
     @GetMapping("/refresh")
     void refreshBooklist(){
-        System.out.println("test");
         bookService.refresh();
+    }
+
+    @GetMapping("/{id}/chapter/{chapter}")
+    String getChapter(@PathVariable String id, @PathVariable int chapter){
+        bookService.getChapter(id,chapter);
+        return null;
     }
 
     @GetMapping(

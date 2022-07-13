@@ -1,8 +1,9 @@
 package com.github.JeTSkY1h.book;
 
+import nl.siegmann.epublib.domain.SpineReference;
 import nl.siegmann.epublib.epub.EpubReader;
 import nl.siegmann.epublib.util.IOUtil;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,6 @@ import java.io.*;
 import java.util.*;
 @Service
 public class BookService {
-
 
     private final BookRepo bookRepo;
     private final String path;
@@ -64,5 +64,27 @@ public class BookService {
         System.out.println(book);
         InputStream in = new BufferedInputStream(new FileInputStream(book.getCoverPath()));
         return IOUtil.toByteArray(in);
+    }
+
+    public List<String> getChapters(String id) throws Exception{
+        Book book = getById(id).orElseThrow();
+        try (FileInputStream fIn = new FileInputStream(book.getFilePath())) {
+            nl.siegmann.epublib.domain.Book epubBook = epubReader.readEpub(fIn);
+            return epubBook.getTableOfContents().getAllUniqueResources().stream().map(resource -> resource.getTitle()).toList();
+        }
+    }
+
+    public String getChapter(String id, int chapter) {
+        Book book = getById(id).orElseThrow();
+        try(FileInputStream fIn = new FileInputStream(book.getFilePath())) {
+            nl.siegmann.epublib.domain.Book ebupBook = epubReader.readEpub(fIn);
+            List< SpineReference> refrences = ebupBook.getSpine().getSpineReferences();
+            String xhtml = new String (refrences.get(chapter).getResource().getData());
+            String text = Jsoup.parse(xhtml).text();
+            return text;
+        } catch (Exception e) {
+            return "Es gab einen Fehler Beim Laden des Kapitels.";
+        }
+
     }
 }
