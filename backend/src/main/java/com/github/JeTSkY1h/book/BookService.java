@@ -1,6 +1,8 @@
 package com.github.JeTSkY1h.book;
 
+import nl.siegmann.epublib.domain.Resource;
 import nl.siegmann.epublib.domain.SpineReference;
+import nl.siegmann.epublib.domain.TOCReference;
 import nl.siegmann.epublib.epub.EpubReader;
 import nl.siegmann.epublib.util.IOUtil;
 import org.jsoup.Jsoup;
@@ -70,7 +72,8 @@ public class BookService {
         Book book = getById(id).orElseThrow();
         try (FileInputStream fIn = new FileInputStream(book.getFilePath())) {
             nl.siegmann.epublib.domain.Book epubBook = epubReader.readEpub(fIn);
-            return epubBook.getTableOfContents().getAllUniqueResources().stream().map(resource -> resource.getTitle()).toList();
+            List<TOCReference> resources = epubBook.getTableOfContents().getTocReferences();
+            return resources.stream().map(resource -> resource.getTitle()).toList();
         }
     }
 

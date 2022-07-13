@@ -1,6 +1,7 @@
 
 import { Link, useNavigate } from "react-router-dom"
 import "./Nav.css"
+import LoginComp from "./LoginComp/LoginComp";
 
 export default function Nav(){
     
@@ -15,7 +16,7 @@ export default function Nav(){
                 </Link>
             </div>
 
-            <button className="login-action btn" onClick={()=>nav("/login")}>Einloggen</button>
+            <LoginComp/>
         </nav>
     )
 }

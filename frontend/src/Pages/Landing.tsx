@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import {FormEvent, useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "../components/Input/Input";
 import Nav from "../components/Nav/Nav";
@@ -8,6 +8,13 @@ export default function Landing(){
 
     const [mail, setMail] = useState("");
     let nav = useNavigate();
+
+    useEffect(()=>{
+        if(localStorage.getItem("jwt-alexandra")) {
+            nav("/main")
+        }
+    },[])
+
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();

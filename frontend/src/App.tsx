@@ -8,10 +8,11 @@ import Login from './Pages/Login';
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Landing/>} />
-      <Route path="/register" element={<Register/>} />
-      <Route path="/login" element={<Login/>} />
-      <Route path="/main" element={<Main />} />
+        <Route path="/" element={<Landing/>} />
+        <Route path="/register" element={<Register/>} />
+        <Route path="/login" element={<Login/>} />
+        <Route path="/main" element={<Main />} />
+        <Route path="/reader/:id" element={<Main />} />
     </Routes>
   );
 }
