@@ -2,7 +2,7 @@ import { Book } from "../../service/models"
 import "./BookComp.css"
 import {useEffect, useState} from "react";
 import {getCover} from "../../service/apiService";
-import {Link, NavLink} from "react-router-dom";
+import { NavLink} from "react-router-dom";
 
 
 interface BookProps {
@@ -32,11 +32,11 @@ export default function BookComp(props: BookProps){
                     </div>
                 </div>
 
-                <Link to={"/reader/" + props.book.id}>
-                    <div>
-                        Open Reader
-                    </div>
-                </Link>
+                <NavLink to={"/reader/" + props.book.id}>
+                    <button>
+                        Read
+                    </button>
+                </NavLink>
             </div>
 
         </NavLink>
