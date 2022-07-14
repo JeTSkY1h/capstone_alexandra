@@ -20,7 +20,9 @@ public class Book {
     String filePath;
     List<String> genre;
     String coverPath;
-
+    int rating;
+    int rated;
+    
     public Book(String title, String author, String filePath, List<String> genre, String coverPath) {
         this.title = title;
         this.author = author;

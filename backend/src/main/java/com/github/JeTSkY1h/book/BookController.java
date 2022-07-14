@@ -27,6 +27,10 @@ public class BookController {
         bookService.refresh();
     }
 
+    @PutMapping("/{id}/rate/{rating}")
+    ResponseEntity<Book> rateBook(@PathVariable String id, @PathVariable int rating){
+        return ResponseEntity.ok(bookService.rateBook(id, rating));
+    }
     @GetMapping("/{id}/chapter")
     ResponseEntity<List<String>> getChapters(@PathVariable String id) throws Exception{
         return ResponseEntity.ok(bookService.getChapters(id));

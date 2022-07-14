@@ -85,6 +85,16 @@ public class BookService {
         } catch (Exception e) {
             return "Es gab einen Fehler Beim Laden des Kapitels.";
         }
+    }
 
+    public Book rateBook(String id, int rating){
+        Book book = getById(id).orElseThrow();
+        int currRatin = book.getRated();
+        int currRated = book.getRated();
+        int newRating = ((rating - currRatin)/(currRated+1))+currRatin;
+        book.setRated(++currRated);
+        book.setRating(newRating);
+        return bookRepo.save(book);
+        
     }
 }
