@@ -2,7 +2,8 @@ import { Book } from "../../service/models"
 import "./BookComp.css"
 import {useEffect, useState} from "react";
 import {getCover} from "../../service/apiService";
-import {NavLink} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
+
 
 interface BookProps {
     book: Book;
@@ -27,20 +28,21 @@ export default function BookComp(props: BookProps){
                 </div>
                 <div className={"book-card-info-wrapper"}>
                     <div>
-                        <h1>Title</h1>
-                        <p>{props.book.title.length >= 40 ? props.book.title.slice(0,35) + "...": props.book.title}</p>
+                        <h1>{props.book.title.length >= 40 ? props.book.title.slice(0,35) + "...": props.book.title}</h1>
                     </div>
-                    <div>
-                        <h1>Author</h1>
-                        <p>{props.book.author}</p>
-                    </div>
-                    <div>
-                        <h1>Genre</h1>
-                        {props.book.genre.filter((genre,i)=> i < 2).map(genre=><p> {genre} </p>)}
-                    </div>
-
                 </div>
+
+                <Link to={"/reader/" + props.book.id}>
+                    <div>
+                        Open Reader
+                    </div>
+                </Link>
             </div>
+
         </NavLink>
+
+
+
+
     )
 }

@@ -27,10 +27,14 @@ public class BookController {
         bookService.refresh();
     }
 
+    @GetMapping("/{id}/chapter")
+    ResponseEntity<List<String>> getChapters(@PathVariable String id) throws Exception{
+        return ResponseEntity.ok(bookService.getChapters(id));
+    }
+
     @GetMapping("/{id}/chapter/{chapter}")
     String getChapter(@PathVariable String id, @PathVariable int chapter){
-        bookService.getChapter(id,chapter);
-        return null;
+        return bookService.getChapter(id,chapter);
     }
 
     @GetMapping(

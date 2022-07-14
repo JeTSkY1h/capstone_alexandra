@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import {FormEvent, useState} from "react";
 import { useLocation, useNavigate } from "react-router-dom"
 import Input from "../components/Input/Input";
 import { registerUser } from "../service/apiService";
@@ -12,13 +12,12 @@ export default function Register(){
     const [eMail, setEMail] = useState(mail? mail : "");
     const [pw, setPw] = useState("")
     const nav = useNavigate();
-    
+
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         registerUser({username: eMail, password: pw})
             .then(data=>localStorage.setItem("jwt-alexandra", data.token)).then(()=>nav("/main"))
             .catch((e)=>console.log(e));
-        
     }
 
     return (

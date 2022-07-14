@@ -1,0 +1,21 @@
+.reader-content {
+    padding-top: 80px;
+}
+
+.sidebar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    position: fixed;
+    display: inline;
+    overflow: scroll;
+    width: 120px;
+    max-height: calc(100vh - 80px);
+}
+
+
+.sidebar::-webkit-scrollbar {
+    display: none;
+}
+.sidebar.hidden {
+    display: none;
+}

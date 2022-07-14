@@ -28,6 +28,9 @@ public class AlexandraIntegrationTest {
 
     @Test
     void AlexandraIntegrationtest(){
+
+
+
         var newUser = new LoginData("testUser", "testPassword");
         //create User
         ResponseEntity<LoginResponse> createUserResponse = restTemplate.postForEntity("/api/user", newUser, LoginResponse.class);
@@ -77,14 +80,15 @@ public class AlexandraIntegrationTest {
         );
         Assertions.assertThat(refresh.getStatusCode()).isEqualTo(HttpStatus.OK);
 
+        //get books
         ResponseEntity<Book[]> books = restTemplate.exchange("/api/book",
                 HttpMethod.GET,
                 new HttpEntity<>(createHeaders(jwtAdmin)),
                 Book[].class
         );
-
-        // Todo: Books are empty?
+        System.out.println(books.getBody()[0]);
         Assertions.assertThat(books.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertThat(books.getBody()[0].getTitle()).isEqualTo("War and Peace");
 
     }
 
