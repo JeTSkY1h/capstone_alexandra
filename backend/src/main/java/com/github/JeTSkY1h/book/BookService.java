@@ -1,12 +1,9 @@
 package com.github.JeTSkY1h.book;
 
-import nl.siegmann.epublib.domain.Resource;
 import nl.siegmann.epublib.domain.SpineReference;
 import nl.siegmann.epublib.domain.TOCReference;
-import nl.siegmann.epublib.domain.TitledResourceReference;
 import nl.siegmann.epublib.epub.EpubReader;
 import nl.siegmann.epublib.util.IOUtil;
-import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +21,14 @@ public class BookService {
     public BookService(BookRepo bookRepo, @Value("${app.book.path}") String path){
         this.bookRepo = bookRepo;
         this.path = path;
+    }
+
+    public byte[] getEpub(String id) throws Exception{
+        Book book =  getById(id).orElseThrow();
+        InputStream in = getClass()
+                .getResourceAsStream(book.getFilePath());
+        return IOUtil.toByteArray(in);
+
     }
 
     public Optional<Book> getById(String id) {
@@ -72,7 +77,13 @@ public class BookService {
         try (FileInputStream fIn = new FileInputStream(book.getFilePath())) {
             nl.siegmann.epublib.domain.Book epubBook = epubReader.readEpub(fIn);
             List<TOCReference> resources = epubBook.getTableOfContents().getTocReferences();
-            return resources.stream().map(TitledResourceReference::getTitle).toList();
+            List<String> chapters = new ArrayList<>();
+            for (int i = 0; i < resources.size(); i++) {
+                TOCReference resource = resources.get(i);
+                String res = resource.getTitle() == null ? "kapitel" + i : resource.getTitle();
+                chapters.add(res);
+            }
+            return chapters;
         }
     }
 
@@ -81,10 +92,19 @@ public class BookService {
         try(FileInputStream fIn = new FileInputStream(book.getFilePath())) {
             nl.siegmann.epublib.domain.Book ebupBook = epubReader.readEpub(fIn);
             List< SpineReference> refrences = ebupBook.getSpine().getSpineReferences();
-            return  new String (refrences.get(chapter).getResource().getData());
+            return  new String(refrences.get(chapter).getResource().getData());
         } catch (Exception e) {
             return "Es gab einen Fehler Beim Laden des Kapitels.";
         }
+    }
 
+    //get average Rating
+    public Book rateBook(Book ratedBook, Integer rating) {
+        Integer rated = ratedBook.getRated();
+        Integer currRating = ratedBook.getRating();
+        ratedBook.setRated(rated+1);
+        Integer newRating = (rating - currRating)/rated;
+        ratedBook.setRating(newRating +currRating);
+        return bookRepo.save(ratedBook);
     }
 }

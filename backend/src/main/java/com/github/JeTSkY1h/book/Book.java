@@ -21,6 +21,11 @@ public class Book {
     List<String> genre;
     String coverPath;
 
+    Integer rating;
+
+    Integer rated;
+
+
     public Book(String title, String author, String filePath, List<String> genre, String coverPath) {
         this.title = title;
         this.author = author;

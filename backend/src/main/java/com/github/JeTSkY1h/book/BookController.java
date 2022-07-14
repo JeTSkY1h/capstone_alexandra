@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RestController
@@ -21,6 +22,15 @@ import java.util.List;
 public class BookController {
     private final BookService bookService;
 
+    @PutMapping("/api/book/rate/{rating}")
+    ResponseEntity<Book> rateBook(@RequestBody Book ratedbook, @PathVariable Integer rating) {
+        return ResponseEntity.of(Optional.of(bookService.rateBook(ratedbook, rating)));
+    }
+
+    @GetMapping(("/{id}/book"))
+    public @ResponseBody byte[] getEpubbook(@PathVariable String id) throws Exception{
+       return bookService.getEpub(id);
+    }
 
     @GetMapping("/refresh")
     void refreshBooklist(){
