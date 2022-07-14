@@ -1,5 +1,5 @@
 import {useParams} from "react-router-dom";
-import {UIEventHandler, useEffect, useState} from "react";
+import { useEffect, useState} from "react";
 import {getChapter, getChapters} from "../service/apiService";
 import "./Reader.css";
 
@@ -37,11 +37,11 @@ export default function Reader(){
         setChapterText("There was an Problem fetching this Chapters text.")
     }
 
-    const getPreviousChapter = () => {
-        if(id){
+    // const getPreviousChapter = () => {
+    //     if(id){
 
-        }
-    }
+    //     }
+    // }
 
     const getNextChapter = () => {
         if(id) {

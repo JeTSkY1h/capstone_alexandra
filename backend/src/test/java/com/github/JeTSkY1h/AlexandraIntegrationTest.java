@@ -1,22 +1,16 @@
 package com.github.JeTSkY1h;
 
 import com.github.JeTSkY1h.book.Book;
-import com.github.JeTSkY1h.book.BookService;
 import com.github.JeTSkY1h.user.LoginData;
 import com.github.JeTSkY1h.user.LoginResponse;
 import com.github.JeTSkY1h.user.MyUser;
 import com.github.JeTSkY1h.user.MyUserService;
-import org.apache.juli.logging.Log;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-
-import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AlexandraIntegrationTest {
