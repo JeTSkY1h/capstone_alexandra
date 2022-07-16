@@ -1,6 +1,7 @@
 import {useParams} from "react-router-dom";
 import { useEffect, useState} from "react";
 import {getChapter, getChapters} from "../service/apiService";
+import {BsChevronDoubleRight} from "react-icons/bs";
 import "./Reader.css";
 
 export default function Reader(){
@@ -48,7 +49,7 @@ export default function Reader(){
             getChapter(id, currChapter + 1).then(data => {
                 setChapterText(data)
                 setCurrChapter((currState => currState + 1))
-            }).catch((e)=>{
+            }).catch(()=>{
                 setChapterText("<div style='color: red'>Das Kapitel konnte nicht geladen werden</div>")
             })
         } else {
@@ -83,7 +84,7 @@ export default function Reader(){
                     </div>
                     <div onScroll={handleScroll} className={sidebarState ? "content hidden" : "content"}>
                         <div dangerouslySetInnerHTML={{__html: chapterText}}/>
-                        <button onClick={getNextChapter} className={"nextpage"}> {">"} </button>
+                        <button onClick={getNextChapter} className={"nextpage"}> <BsChevronDoubleRight/> </button>
                     </div>
                 </div>
         </>
