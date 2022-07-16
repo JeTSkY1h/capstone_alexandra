@@ -16,18 +16,18 @@ import java.util.Optional;
 
 @Controller
 @RestController
-@RequestMapping("/api/book")
+@RequestMapping("/api/books")
 @RequiredArgsConstructor
 @EnableWebMvc
 public class BookController {
     private final BookService bookService;
 
-    @PutMapping("/api/book/rate/{rating}")
-    ResponseEntity<Book> rateBook(@RequestBody Book ratedbook, @PathVariable Integer rating) {
-        return ResponseEntity.of(Optional.of(bookService.rateBook(ratedbook, rating)));
+    @PutMapping("/{id}/rate")
+    ResponseEntity<Book> rateBook(@PathVariable String id, @RequestBody Integer newRating) throws Exception {
+        return ResponseEntity.of(Optional.of(bookService.rateBook(id, newRating)));
     }
 
-    @GetMapping(("/{id}/book"))
+    @GetMapping(("/{id}/epub"))
     public @ResponseBody byte[] getEpubbook(@PathVariable String id) throws Exception{
        return bookService.getEpub(id);
     }

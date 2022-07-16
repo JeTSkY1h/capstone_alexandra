@@ -21,19 +21,17 @@ export default function BookComp(props: BookProps){
     },[props])
 
     return (
-        <NavLink to={"/book/"+ props.book.id}>
+        <NavLink to={"/book/"+ props.book.id} style={{ textDecoration: 'none' }}>
             <div className="book-card">
                 <div className="cover-img-wrapper">
                     <img src={cover} alt={"Buch Cover"}/>
                 </div>
                 <div className={"book-card-info-wrapper"}>
-                    <div>
-                        <h1>{props.book.title.length >= 40 ? props.book.title.slice(0,35) + "...": props.book.title}</h1>
-                    </div>
+                    <h1>{props.book.title.length >= 40 ? props.book.title.slice(0,35) + "...": props.book.title}</h1>
                 </div>
 
                 <NavLink to={"/reader/" + props.book.id}>
-                    <button>
+                    <button className={"btn small"}>
                         Read
                     </button>
                 </NavLink>

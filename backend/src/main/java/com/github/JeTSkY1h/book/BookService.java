@@ -99,12 +99,13 @@ public class BookService {
     }
 
     //get average Rating
-    public Book rateBook(Book ratedBook, Integer rating) {
-        Integer rated = ratedBook.getRated();
-        Integer currRating = ratedBook.getRating();
-        ratedBook.setRated(rated+1);
+    public Book rateBook(String id, Integer rating) throws Exception {
+        Book book = getById(id).orElseThrow();
+        Integer rated = book.getRated();
+        Integer currRating = book.getRating();
+        book.setRated(rated+1);
         Integer newRating = (rating - currRating)/rated;
-        ratedBook.setRating(newRating +currRating);
-        return bookRepo.save(ratedBook);
+        book.setRating(newRating +currRating);
+        return bookRepo.save(book);
     }
 }
