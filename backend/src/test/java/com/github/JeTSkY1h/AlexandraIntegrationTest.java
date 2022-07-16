@@ -42,7 +42,7 @@ public class AlexandraIntegrationTest {
         Assertions.assertThat(jwtNoAdmin).isNotBlank();
 
         //try to refresh with no admin User
-        ResponseEntity<Void> refreshTry = restTemplate.exchange("/api/book/refresh",
+        ResponseEntity<Void> refreshTry = restTemplate.exchange("/api/books/refresh",
                 HttpMethod.GET,
                 new HttpEntity<>(createHeaders(jwtNoAdmin)),
                 Void.class
@@ -67,7 +67,7 @@ public class AlexandraIntegrationTest {
 
 
         //Refresh book list
-        ResponseEntity<Void> refresh = restTemplate.exchange("/api/book/refresh",
+        ResponseEntity<Void> refresh = restTemplate.exchange("/api/books/refresh",
                 HttpMethod.GET,
                 new HttpEntity<>(createHeaders(jwtAdmin)),
                 Void.class
@@ -75,7 +75,7 @@ public class AlexandraIntegrationTest {
         Assertions.assertThat(refresh.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         //get books
-        ResponseEntity<Book[]> books = restTemplate.exchange("/api/book",
+        ResponseEntity<Book[]> books = restTemplate.exchange("/api/books",
                 HttpMethod.GET,
                 new HttpEntity<>(createHeaders(jwtAdmin)),
                 Book[].class
