@@ -19,7 +19,7 @@ export default function Reader(){
         if(id) {
             getChapter(id, chapterNr).then(data => {
                 console.log(data)
-                let pattern = /<img src=\"(.*\").*\/>/
+                let pattern = /<img src="(.*").*\/>/
                 let match = pattern.exec(data);
                 console.log(match)
                 if(match) console.log(match[1])
@@ -42,8 +42,9 @@ export default function Reader(){
             })
             getNewChapter(0);
         }
+        /* eslint-disable */
     },[id])
-
+    /* eslint-enable */
     const getChapterText= (chapterNr: number) => {
         if (id) {
             getNewChapter(chapterNr)
