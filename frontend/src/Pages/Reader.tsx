@@ -1,5 +1,5 @@
 import {useParams} from "react-router-dom";
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {getChapter, getChapters} from "../service/apiService";
 import {BsChevronDoubleRight} from "react-icons/bs";
 import {FaBars, FaTimes} from "react-icons/fa";
@@ -15,7 +15,7 @@ export default function Reader(){
     const [currChapter, setCurrChapter] = useState(0);
 
 
-    const getNewChapter = (chapterNr: number) => {
+    const getNewChapter =  useCallback((chapterNr: number)=> {
         if(id) {
             getChapter(id, chapterNr).then(data => {
                 console.log(data)
@@ -31,7 +31,8 @@ export default function Reader(){
         } else {
             setChapterText("<div style='color: red'>Das Kapitel konnte nicht geladen werden</div>")
         }
-    }
+    },[id])
+
 
 
     useEffect(()=>{
@@ -42,9 +43,8 @@ export default function Reader(){
             })
             getNewChapter(0);
         }
-        /* eslint-disable */
-    },[id])
-    /* eslint-enable */
+    },[id, getNewChapter])
+
     const getChapterText= (chapterNr: number) => {
         if (id) {
             getNewChapter(chapterNr)
