@@ -14,4 +14,5 @@ public class MyUser {
     String username;
     String password;
     List<String> roles;
+    List<BookUserData> bookData;
 }

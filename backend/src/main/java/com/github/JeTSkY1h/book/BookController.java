@@ -48,6 +48,15 @@ public class BookController {
     }
 
     @GetMapping(
+            value="/{id}/images/{resHref}",
+            produces= MediaType.IMAGE_JPEG_VALUE
+    )
+    public @ResponseBody byte[] getResourceImgImg(@PathVariable String id, @PathVariable String resHref ) throws Exception{
+        return bookService.getResourceImg(id, resHref);
+    }
+
+
+    @GetMapping(
             value="/cover/{id}",
             produces= MediaType.IMAGE_PNG_VALUE
     )

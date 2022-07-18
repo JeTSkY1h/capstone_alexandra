@@ -1,54 +1,30 @@
 import {useParams} from "react-router-dom";
-import { useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {getChapter, getChapters} from "../service/apiService";
 import {BsChevronDoubleRight} from "react-icons/bs";
+import {FaBars, FaTimes} from "react-icons/fa";
 import "./Reader.css";
 
 export default function Reader(){
 
     const {id} = useParams()
-
+    const content = useRef<HTMLDivElement>(null);
     const [toc, setToc] = useState<Array<string>>(["fetching Chapters"]);
     const [chapterText, setChapterText] = useState("");
     const [sidebarState, setSidebarState] = useState(false);
     const [currChapter, setCurrChapter] = useState(0);
 
-    useEffect(()=>{
-        if(id){
-            getChapters(id).then(data=> {
-                console.log(data)
-                setToc(data)
-            })
-            getChapter(id, 0).then(data=>{
-                setChapterText(data);
-            })
-        }
-    },[id])
 
-    const getChapterText= (chapterNr: number) => {
-        if (id) {
-            getChapter(id, chapterNr).then(data=> {
+    const getNewChapter = (chapterNr: number) => {
+        if(id) {
+            getChapter(id, chapterNr).then(data => {
+                console.log(data)
+                let pattern = /<img src=\"(.*\").*\/>/
+                let match = pattern.exec(data);
+                console.log(match)
+                if(match) console.log(match[1])
                 setChapterText(data)
                 setCurrChapter(chapterNr);
-                console.log(data)
-            })
-
-            return
-        }
-        setChapterText("There was an Problem fetching this Chapters text.")
-    }
-
-    // const getPreviousChapter = () => {
-    //     if(id){
-
-    //     }
-    // }
-
-    const getNextChapter = () => {
-        if(id) {
-            getChapter(id, currChapter + 1).then(data => {
-                setChapterText(data)
-                setCurrChapter((currState => currState + 1))
             }).catch(()=>{
                 setChapterText("<div style='color: red'>Das Kapitel konnte nicht geladen werden</div>")
             })
@@ -57,15 +33,42 @@ export default function Reader(){
         }
     }
 
-    const handleScroll = (e: any) => {
-        console.log(e.target.scrollTop);
+
+    useEffect(()=>{
+        if(id){
+            getChapters(id).then(data=> {
+                console.log(data)
+                setToc(data)
+            })
+            getNewChapter(0);
+        }
+    },[id])
+
+    const getChapterText= (chapterNr: number) => {
+        if (id) {
+            getNewChapter(chapterNr)
+        }
+    }
+
+     // const getPreviousChapter = () => {
+     //    getNewChapter(currChapter-1);
+     // }
+
+    const getNextChapter = () => {
+        getNewChapter(currChapter+1)
+    }
+
+    const handleScroll = () => {
+        if(content.current){
+            console.log(content.current.scrollTop);
+        }
     }
 
     return (
         <>
             <nav>
-                <button onClick={()=>{setSidebarState(currState=>!currState)}}>
-                    toggleSidebar
+                <button className={"btn sidebar-toggle"} onClick={()=>{setSidebarState(currState=>!currState)}}>
+                    {sidebarState ? <FaTimes/> : <FaBars/>}
                 </button>
             </nav>
                 <div className={"reader-content"}>
@@ -82,7 +85,7 @@ export default function Reader(){
                             )
                         })}
                     </div>
-                    <div onScroll={handleScroll} className={sidebarState ? "content hidden" : "content"}>
+                    <div  ref={content} onScroll={handleScroll} className={sidebarState ? "content hidden" : "content"}>
                         <div dangerouslySetInnerHTML={{__html: chapterText}}/>
                         <button onClick={getNextChapter} className={"nextpage"}> <BsChevronDoubleRight/> </button>
                     </div>
