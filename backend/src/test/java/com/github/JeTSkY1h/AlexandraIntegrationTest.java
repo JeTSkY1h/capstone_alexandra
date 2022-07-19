@@ -1,22 +1,16 @@
 package com.github.JeTSkY1h;
 
 import com.github.JeTSkY1h.book.Book;
-import com.github.JeTSkY1h.book.BookService;
 import com.github.JeTSkY1h.user.LoginData;
 import com.github.JeTSkY1h.user.LoginResponse;
 import com.github.JeTSkY1h.user.MyUser;
 import com.github.JeTSkY1h.user.MyUserService;
-import org.apache.juli.logging.Log;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-
-import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AlexandraIntegrationTest {
@@ -48,7 +42,7 @@ public class AlexandraIntegrationTest {
         Assertions.assertThat(jwtNoAdmin).isNotBlank();
 
         //try to refresh with no admin User
-        ResponseEntity<Void> refreshTry = restTemplate.exchange("/api/book/refresh",
+        ResponseEntity<Void> refreshTry = restTemplate.exchange("/api/books/refresh",
                 HttpMethod.GET,
                 new HttpEntity<>(createHeaders(jwtNoAdmin)),
                 Void.class
@@ -73,7 +67,7 @@ public class AlexandraIntegrationTest {
 
 
         //Refresh book list
-        ResponseEntity<Void> refresh = restTemplate.exchange("/api/book/refresh",
+        ResponseEntity<Void> refresh = restTemplate.exchange("/api/books/refresh",
                 HttpMethod.GET,
                 new HttpEntity<>(createHeaders(jwtAdmin)),
                 Void.class
@@ -81,7 +75,7 @@ public class AlexandraIntegrationTest {
         Assertions.assertThat(refresh.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         //get books
-        ResponseEntity<Book[]> books = restTemplate.exchange("/api/book",
+        ResponseEntity<Book[]> books = restTemplate.exchange("/api/books",
                 HttpMethod.GET,
                 new HttpEntity<>(createHeaders(jwtAdmin)),
                 Book[].class

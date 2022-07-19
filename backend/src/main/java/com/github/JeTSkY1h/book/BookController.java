@@ -12,15 +12,25 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RestController
-@RequestMapping("/api/book")
+@RequestMapping("/api/books")
 @RequiredArgsConstructor
 @EnableWebMvc
 public class BookController {
     private final BookService bookService;
 
+    @PutMapping("/{id}/rate")
+    ResponseEntity<Book> rateBook(@PathVariable String id, @RequestBody Integer newRating) throws Exception {
+        return ResponseEntity.of(Optional.of(bookService.rateBook(id, newRating)));
+    }
+
+    @GetMapping(("/{id}/epub"))
+    public @ResponseBody byte[] getEpubbook(@PathVariable String id) throws Exception{
+       return bookService.getEpub(id);
+    }
 
     @GetMapping("/refresh")
     void refreshBooklist(){
@@ -36,6 +46,15 @@ public class BookController {
     String getChapter(@PathVariable String id, @PathVariable int chapter){
         return bookService.getChapter(id,chapter);
     }
+
+    @GetMapping(
+            value="/{id}/images/{resHref}",
+            produces= MediaType.IMAGE_JPEG_VALUE
+    )
+    public @ResponseBody byte[] getResourceImgImg(@PathVariable String id, @PathVariable String resHref ) throws Exception{
+        return bookService.getResourceImg(id, resHref);
+    }
+
 
     @GetMapping(
             value="/cover/{id}",

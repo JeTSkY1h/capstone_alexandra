@@ -2,7 +2,7 @@ import { Book } from "../../service/models"
 import "./BookComp.css"
 import {useEffect, useState} from "react";
 import {getCover} from "../../service/apiService";
-import {Link, NavLink} from "react-router-dom";
+import { NavLink} from "react-router-dom";
 
 
 interface BookProps {
@@ -21,22 +21,20 @@ export default function BookComp(props: BookProps){
     },[props])
 
     return (
-        <NavLink to={"/book/"+ props.book.id}>
+        <NavLink to={"/book/"+ props.book.id} style={{ textDecoration: 'none' }}>
             <div className="book-card">
                 <div className="cover-img-wrapper">
                     <img src={cover} alt={"Buch Cover"}/>
                 </div>
                 <div className={"book-card-info-wrapper"}>
-                    <div>
-                        <h1>{props.book.title.length >= 40 ? props.book.title.slice(0,35) + "...": props.book.title}</h1>
-                    </div>
+                    <h1>{props.book.title.length >= 40 ? props.book.title.slice(0,35) + "...": props.book.title}</h1>
                 </div>
 
-                <Link to={"/reader/" + props.book.id}>
-                    <div>
-                        Open Reader
-                    </div>
-                </Link>
+                <NavLink to={"/reader/" + props.book.id}>
+                    <button className={"btn small"}>
+                        Read
+                    </button>
+                </NavLink>
             </div>
 
         </NavLink>

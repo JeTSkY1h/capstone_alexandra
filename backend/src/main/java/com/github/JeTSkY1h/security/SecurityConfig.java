@@ -22,9 +22,10 @@ public class SecurityConfig  {
         return http
                 .csrf().disable()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/api/books/*/images/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/user", "/api/auth").permitAll()
                 .antMatchers(HttpMethod.GET, "/*", "/index*", "/static/**", "/*.js", "/*.json").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/book/refresh").hasRole("admin")
+                .antMatchers(HttpMethod.GET, "/api/books/refresh").hasRole("admin")
                 .antMatchers("/**").authenticated()
                 .and()
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
