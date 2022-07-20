@@ -11,3 +11,11 @@ export interface Book {
     genre: string[],
     coverPath: string,
 }
+
+export interface ResumeData {
+    bookId: string;
+    contentWidth: number;
+    contentHeight: number;
+    contentScrollTop: number;
+    currChapter: number;
+}
