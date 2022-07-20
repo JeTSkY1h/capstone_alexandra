@@ -14,19 +14,14 @@ import java.util.List;
 @NoArgsConstructor
 public class Book {
     @Id
-    String id;
-    String title;
-    String author;
-    String filePath;
-    List<String> genre;
-    String coverPath;
-
-    Integer rating;
-
-    Integer rated;
-
-    String lang;
-
+    private String id;
+    private String title;
+    private String author;
+    private String filePath;
+    private List<String> genre;private String coverPath;
+    private Integer rating;
+    private Integer rated;
+    private String lang;
 
     public Book(String title, String author, String filePath, List<String> genre, String coverPath) {
         this.title = title;

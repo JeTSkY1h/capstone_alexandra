@@ -1,10 +1,18 @@
 import axios, {AxiosResponse} from "axios";
-import {Book, LoginData} from "./models";
+import {Book, LoginData, ResumeData} from "./models";
 
 let requestConfig = {
     headers: {
         Authorization: `Bearer ${localStorage.getItem("jwt-alexandra")}`
     }
+}
+
+export function setBookData(bookData: ResumeData){
+    return axios.put("/api/user/bookdata", bookData, requestConfig).then(res=>res.data)
+}
+
+export function getBookData(){
+    return axios.get("/api/user/bookdata", requestConfig).then(res=>res.data)
 }
 
 export function parseJwt(){
@@ -19,7 +27,6 @@ export function parseJwt(){
     } else {
         return "No Logintoken found. Are ypu logged in?"
     }
-
 }
 
 export function getChapters(id: string){

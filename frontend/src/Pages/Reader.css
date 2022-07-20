@@ -21,6 +21,13 @@
     right: 1rem;
 }
 
+.prevpage {
+    padding: 0.5rem;
+    position: absolute;
+    left: 1rem;
+}
+
+
 .content.hidden {
     margin-left: 136px;
 }
@@ -54,6 +61,10 @@ nav {
     width: 2rem;
 }
 
+.blur {
+    z-index: 0;
+    filter: blur(4px);
+}
 
 .sidebar::-webkit-scrollbar {
     display: none;
@@ -62,3 +73,18 @@ nav {
     margin-left: -120px;
 }
 
+.modal-bg {
+    width: 100vw;
+    height: calc(100vh - 80px);
+    position: absolute;
+    top: 80px;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+.screensize-alert {
+    border: 1px solid red;
+}
