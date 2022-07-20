@@ -1,18 +1,20 @@
 import axios, {AxiosResponse} from "axios";
 import {Book, LoginData, ResumeData} from "./models";
 
-let requestConfig = {
-    headers: {
-        Authorization: `Bearer ${localStorage.getItem("jwt-alexandra")}`
+const requestConfig = () => {
+    return {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwt-alexandra")}`
+        }
     }
 }
 
 export function setBookData(bookData: ResumeData){
-    return axios.put("/api/user/bookdata", bookData, requestConfig).then(res=>res.data)
+    return axios.put("/api/user/bookdata", bookData, requestConfig()).then(res=>res.data)
 }
 
 export function getBookData(){
-    return axios.get("/api/user/bookdata", requestConfig).then(res=>res.data)
+    return axios.get("/api/user/bookdata", requestConfig()).then(res=>res.data)
 }
 
 export function parseJwt(){
@@ -30,11 +32,11 @@ export function parseJwt(){
 }
 
 export function getChapters(id: string){
-    return axios.get("/api/books/" + id + "/chapter", requestConfig).then(res=>res.data)
+    return axios.get("/api/books/" + id + "/chapter", requestConfig()).then(res=>res.data)
 }
 
 export function getChapter(id: string, chapter: number){
-    return axios.get(`/api/books/${id}/chapter/${chapter}`, requestConfig).then(res=>res.data)
+    return axios.get(`/api/books/${id}/chapter/${chapter}`, requestConfig()).then(res=>res.data)
 }
 
 export function getCover(id: string){
@@ -47,11 +49,11 @@ export function getCover(id: string){
 }
 
 export function getBook(id: string){
-    return axios.get("/api/books/" + id, requestConfig).then(res=>res.data)
+    return axios.get("/api/books/" + id, requestConfig()).then(res=>res.data)
 }
 
 export function getBooks(){
-    return axios.get("api/books", requestConfig).then((res: AxiosResponse<Book[]>)=>res.data);
+    return axios.get("api/books", requestConfig()).then((res: AxiosResponse<Book[]>)=>res.data);
 }
 
 export function login(user: LoginData){
@@ -63,5 +65,5 @@ export function registerUser(user: LoginData){
 }
 
 export function getLogedInUsername(){
-    return axios.get("/api/user", requestConfig).then(res => res.data)
+    return axios.get("/api/user", requestConfig()).then(res => res.data)
 }

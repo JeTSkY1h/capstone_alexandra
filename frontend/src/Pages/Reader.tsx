@@ -86,7 +86,7 @@ export default function Reader(){
             setCurrChapter(resumeData.currChapter)
             const contentDiv = document.getElementById("test");
             if (contentDiv) {
-                contentDiv.scrollBy({top: resumeData.contentScrollTop});
+                contentDiv.scrollBy(0, resumeData.contentScrollTop);
             } else {
                 console.log("no DIV! ")
             }
@@ -97,12 +97,23 @@ export default function Reader(){
         resumeDataStuff();
     },[resumeData, resumeDataStuff])
 
+    const scrollTop = ()=>{
+        const contentDiv = document.getElementById("test");
+        if(contentDiv) {
+            contentDiv.scrollTo(0,0)
+        } else {
+            console.log("NO CONTENT DIV")
+        }
+    }
+
      const getPreviousChapter = () => {
          setCurrChapter(chapter=>chapter-1);
+         scrollTop()
      }
 
     const getNextChapter = () => {
         setCurrChapter(chapter=>chapter+1);
+        scrollTop()
     }
 
     const handleScroll = () => {
