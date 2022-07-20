@@ -40,7 +40,7 @@ export default function Reader(){
 
     useEffect(()=>{
         getNewChapter();
-    },[currChapter])
+    },[currChapter, getNewChapter])
 
     useLayoutEffect(()=>{
         if(id) {
@@ -95,7 +95,7 @@ export default function Reader(){
 
     useEffect(()=>{
         resumeDataStuff();
-    },[resumeData])
+    },[resumeData, resumeDataStuff])
 
      const getPreviousChapter = () => {
          setCurrChapter(chapter=>chapter-1);
