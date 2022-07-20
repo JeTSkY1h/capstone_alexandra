@@ -23,6 +23,7 @@ public class Book {
     private Integer rated;
     private String lang;
 
+
     public Book(String title, String author, String filePath, List<String> genre, String coverPath) {
         this.title = title;
         this.author = author;
