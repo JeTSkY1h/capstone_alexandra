@@ -18,6 +18,10 @@ export default function Reader(){
     const [currChapter, setCurrChapter] = useState(0);
     const [otherScreen, setOtherScreen] = useState(false);
 
+    const dealy = (time: number) =>{
+        return new Promise(resolve => setTimeout(resolve,time))
+    }
+
     const getNewChapter =  useCallback(()=> {
         if(id) {
             getChapter(id, currChapter).then(data => {
@@ -42,36 +46,40 @@ export default function Reader(){
         getNewChapter();
     },[currChapter, getNewChapter])
 
+
     useLayoutEffect(()=>{
         if(id) {
             getChapters(id).then(data => {
                 setToc(data)
             })
             getBookData().then((data: ResumeData[]) => {
+                const content = document.getElementById("test");
                 if (!data) {
                     setResumeData({
                         bookId: id,
                         currChapter: currChapter,
-                        contentHeight: content.current!.offsetHeight,
-                        contentWidth: content.current!.offsetWidth,
-                        contentScrollTop: content.current!.scrollTop
+                        contentHeight: content!.offsetHeight,
+                        contentWidth: content!.offsetWidth,
+                        contentScrollTop: content!.scrollTop
                     })
                     setCurrChapter(0)
                 } else {
                     let bookData = data.filter((bookdata: ResumeData) => bookdata.bookId === id)[0]
                     if (bookData) {
                         setResumeData(bookData)
-                        //setCurrChapter(bookData.currChapter) Maybe do this in a useEffect
-                        if (content.current?.offsetWidth !== bookData.contentWidth || content.current?.offsetHeight !== bookData.contentHeight) {
+                   if ( content && (content.offsetWidth !== bookData.contentWidth || content.offsetHeight !== bookData.contentHeight)) {
                             setOtherScreen(true);
                         }
+                        dealy(200).then(()=>{
+                            scrollBy(bookData.contentScrollTop)
+                        })
                     } else {
                         setResumeData({
                             bookId: id,
                             currChapter: currChapter,
-                            contentHeight: content.current!.offsetHeight,
-                            contentWidth: content.current!.offsetWidth,
-                            contentScrollTop: content.current!.scrollTop
+                            contentHeight: content!.offsetHeight,
+                            contentWidth: content!.offsetWidth,
+                            contentScrollTop: content!.scrollTop
                         })
                     }
                 }
@@ -84,18 +92,22 @@ export default function Reader(){
         console.log("triggered callback")
         if(resumeData) {
             setCurrChapter(resumeData.currChapter)
-            const contentDiv = document.getElementById("test");
-            if (contentDiv) {
-                contentDiv.scrollBy(0, resumeData.contentScrollTop);
-            } else {
-                console.log("no DIV! ")
-            }
+            scrollBy(resumeData.contentScrollTop)
         }
-    },[resumeData, ])
+    },[resumeData])
 
-    useEffect(()=>{
+    useLayoutEffect(()=>{
         resumeDataStuff();
     },[resumeData, resumeDataStuff])
+
+    const scrollBy = (target: number)=> {
+        const contentDiv = document.getElementById("test");
+        if(contentDiv) {
+            contentDiv.scrollTo(0,target)
+        } else {
+            console.log("NO CONTENT DIV")
+        }
+    }
 
     const scrollTop = ()=>{
         const contentDiv = document.getElementById("test");
@@ -126,11 +138,12 @@ export default function Reader(){
     }
 
     const overwriteScreenSize = ()=> {
+        const contentDiv = document.getElementById("test");
         setOtherScreen(false)
         let currData = resumeData;
-        if(currData && content.current){
-            currData.contentWidth = content.current.offsetWidth;
-            currData.contentHeight = content.current.offsetHeight;
+        if(currData && contentDiv){
+            currData.contentWidth = contentDiv.offsetWidth;
+            currData.contentHeight = contentDiv.offsetHeight;
             setResumeData(currData);
             setBookData(currData).then(data=>console.log(data))
         }
@@ -169,11 +182,12 @@ export default function Reader(){
                         })}
                     </div>
 
-                    <div  ref={content} id={"test"} onScroll={handleScroll} className={sidebarState ? "content hidden" : "content"}>
+                    <div  id={"test"} onScroll={handleScroll} className={sidebarState ? "content hidden" : "content"}>
                         <div dangerouslySetInnerHTML={{__html: chapterText}}/>
                         {currChapter < toc.length && <button onClick={getNextChapter} className={"nextpage"}> <BsChevronDoubleRight/> </button>}
                         {currChapter > 0 && <button onClick={getPreviousChapter} className={"prevpage"}> <BsChevronDoubleLeft/> </button>}
                     </div>
+
                 </div>
         </>
     )
