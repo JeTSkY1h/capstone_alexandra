@@ -31,10 +31,11 @@ public class MyUserController {
 
     @GetMapping("/bookdata")
     ResponseEntity<List<BookUserData>>getBookUserData(Principal principal){
-        if(myUserService.getBookuserData(principal.getName()).isEmpty()) {
+        Optional<MyUser> user = myUserService.findByUsername(principal.getName());
+        if(user.isEmpty()) {
             return null;
         }
-        return ResponseEntity.of(myUserService.getBookuserData(principal.getName()));
+        return ResponseEntity.ok(user.get().getBookData());
     }
 
     @PutMapping("/bookdata")

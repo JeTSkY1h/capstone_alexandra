@@ -27,11 +27,6 @@ public class BookController {
         return ResponseEntity.of(Optional.of(bookService.rateBook(id, newRating)));
     }
 
-    @GetMapping(("/{id}/epub"))
-    public @ResponseBody byte[] getEpubbook(@PathVariable String id) throws Exception{
-       return bookService.getEpub(id);
-    }
-
     @GetMapping("/refresh")
     void refreshBooklist(){
         bookService.refresh();
