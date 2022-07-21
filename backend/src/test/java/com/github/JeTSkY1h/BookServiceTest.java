@@ -74,9 +74,10 @@ public class BookServiceTest {
         Book expectedBook = new Book();
         expectedBook.setTitle("War and Peace");
         expectedBook.setAuthor("Tolstoy, graf Leo");
-        expectedBook.setFilePath((bookpath + "/pg2600.epub").replaceAll("/", Matcher.quoteReplacement("\\")).substring(1));
+        expectedBook.setFilePath((bookpath + sep + "pg2600.epub").replace("/C:", "C:").replace("/", sep ));
         expectedBook.setGenre(List.of("Historical fiction", "War stories", "Napoleonic Wars, 1800-1815 -- Campaigns -- Russia -- Fiction", "Russia -- History -- Alexander I, 1801-1825 -- Fiction", "Aristocracy (Social class) -- Russia -- Fiction"));
-        expectedBook.setCoverPath((bookpath + "/WarandPeace.png").replaceAll("/", Matcher.quoteReplacement("\\")).substring(1));
+        expectedBook.setCoverPath((bookpath + "/WarandPeace.png").replace("/C:", "C:").replace("/", sep ));
+
         List<String> expectedChapters = List.of("WAR AND PEACE",
                 "Contents",
                 "BOOK ONE: 1805",
@@ -481,7 +482,7 @@ public class BookServiceTest {
         expectedBook.setFilePath((bookpath + sep + "pg2600.epub").replace("/C:", "C:").replace("/", sep ));
         expectedBook.setGenre(List.of("Historical fiction", "War stories", "Napoleonic Wars, 1800-1815 -- Campaigns -- Russia -- Fiction", "Russia -- History -- Alexander I, 1801-1825 -- Fiction", "Aristocracy (Social class) -- Russia -- Fiction"));
         expectedBook.setCoverPath((bookpath +  sep + "WarandPeace.png").replace("/C:", "C:").replace("/", sep ));
-
+        Mockito.when(bookRepo.findById("test123")).thenReturn(Optional.of(expectedBook));
         String chapterText = bookService.getChapter("test123", 5);
         Assertions.assertThat(chapterText).isEqualTo("""
                 <?xml version='1.0' encoding='utf-8'?>
