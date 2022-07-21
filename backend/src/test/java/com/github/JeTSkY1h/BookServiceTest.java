@@ -8,10 +8,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -20,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class BookServiceTest {
 
+    String sep = File.separator;
     BookRepo bookRepo = Mockito.mock(BookRepo.class);
     String bookpath = BookServiceTest.class.getResource("books").getPath();
     BookService bookService = new BookService(bookRepo, bookpath);
@@ -29,12 +27,12 @@ public class BookServiceTest {
         Book expectedBook = new Book();
         expectedBook.setTitle("War and Peace");
         expectedBook.setAuthor("Tolstoy, graf Leo");
-        expectedBook.setFilePath((bookpath + "/pg2600.epub").replaceAll("/", Matcher.quoteReplacement("\\")).substring(1));
+        expectedBook.setFilePath((bookpath + "/pg2600.epub").replace("/C:", "C:").replace("/", sep ));
         expectedBook.setGenre(List.of("Historical fiction", "War stories", "Napoleonic Wars, 1800-1815 -- Campaigns -- Russia -- Fiction", "Russia -- History -- Alexander I, 1801-1825 -- Fiction", "Aristocracy (Social class) -- Russia -- Fiction"));
         expectedBook.setCoverPath((bookpath + "/WarandPeace.png").replaceAll("/", Matcher.quoteReplacement("\\")).substring(1));
         List<Book> books = bookService.refresh();
         Mockito.verify(bookRepo).saveAll(books);
-        System.out.println(books);
+        System.out.println(sep);
         Assertions.assertThat(books.get(0)).isEqualTo(expectedBook);
     }
 
