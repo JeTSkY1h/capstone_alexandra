@@ -6,8 +6,8 @@ import lombok.Data;
 @Data
 public class BookUserData {
     String bookId;
-    int timeRead;
-    int contentSize;
+    int contentWidth;
+    int contentHeight;
+    int contentScrollTop;
     int currChapter;
-    int currScroll;
 }
