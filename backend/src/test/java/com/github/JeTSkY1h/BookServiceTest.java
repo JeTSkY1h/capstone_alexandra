@@ -27,12 +27,12 @@ public class BookServiceTest {
         Book expectedBook = new Book();
         expectedBook.setTitle("War and Peace");
         expectedBook.setAuthor("Tolstoy, graf Leo");
-        expectedBook.setFilePath((bookpath + "/pg2600.epub").replace("/C:", "C:").replace("/", sep ));
+        expectedBook.setFilePath((bookpath + sep + "pg2600.epub").replace("/C:", "C:").replace("/", sep ));
         expectedBook.setGenre(List.of("Historical fiction", "War stories", "Napoleonic Wars, 1800-1815 -- Campaigns -- Russia -- Fiction", "Russia -- History -- Alexander I, 1801-1825 -- Fiction", "Aristocracy (Social class) -- Russia -- Fiction"));
         expectedBook.setCoverPath((bookpath + "/WarandPeace.png").replace("/C:", "C:").replace("/", sep ));
         List<Book> books = bookService.refresh();
         Mockito.verify(bookRepo).saveAll(books);
-        System.out.println(sep);
+        System.out.println(books);
         Assertions.assertThat(books.get(0)).isEqualTo(expectedBook);
     }
 
