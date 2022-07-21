@@ -3,6 +3,7 @@
 }
 
 .book-card {
+    position: relative;
     border-radius: 5px;
     padding: 1rem;
     color: white;
@@ -13,6 +14,7 @@
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }
+
 
 .book-card:hover {
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
@@ -25,18 +27,19 @@
 
 .cover-img-wrapper img {
     height: 100%;
-    width: 100%;
 }
 
 .book-card-info-wrapper h1 {
-    width: 100%;
+    width: 100px;
     font-size: 0.75rem;
-    margin: 0 4.5rem 0 0.2rem;
+    margin: 0.5rem 4.5rem 0 0.2rem;
 }
 
-
 .btn.small {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
     margin-top: 1rem;
     padding: 0 1rem 0 1rem;
-    width: 100%;
+    width: 114px;
 }
