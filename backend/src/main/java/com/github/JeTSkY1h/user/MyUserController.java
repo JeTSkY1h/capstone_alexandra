@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -25,6 +26,19 @@ public class MyUserController {
 
     @GetMapping
     ResponseEntity<String>getUser(Principal principal){
-        return ResponseEntity.of(Optional.of(myUserService.findByUsername(principal.getName()).get().getId()));
+        return ResponseEntity.of(Optional.of(myUserService.findByUsername(principal.getName()).orElseThrow().getId()));
+    }
+
+    @GetMapping("/bookdata")
+    ResponseEntity<List<BookUserData>>getBookUserData(Principal principal){
+        if(myUserService.getBookuserData(principal.getName()).isEmpty()) {
+            return null;
+        }
+        return ResponseEntity.of(myUserService.getBookuserData(principal.getName()));
+    }
+
+    @PutMapping("/bookdata")
+    ResponseEntity<List<BookUserData>>setBookUserData(Principal principal, @RequestBody BookUserData bookdata){
+        return ResponseEntity.of(Optional.of(myUserService.setBookUserData(principal.getName(), bookdata)));
     }
 }
