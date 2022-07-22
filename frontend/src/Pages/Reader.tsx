@@ -18,7 +18,7 @@ export default function Reader(){
     const [currChapter, setCurrChapter] = useState(0);
     const [otherScreen, setOtherScreen] = useState(false);
 
-    const dealy = (time: number) =>{
+    const delay = (time: number) =>{
         return new Promise(resolve => setTimeout(resolve,time))
     }
 
@@ -70,9 +70,9 @@ export default function Reader(){
                    if ( content && (content.offsetWidth !== bookData.contentWidth || content.offsetHeight !== bookData.contentHeight)) {
                             setOtherScreen(true);
                         }
-                        dealy(200).then(()=>{
-                            scrollBy(bookData.contentScrollTop)
-                        })
+
+                            //scrollBy(bookData.contentScrollTop)
+
                     } else {
                         setResumeData({
                             bookId: id,
@@ -92,7 +92,9 @@ export default function Reader(){
         console.log("triggered callback")
         if(resumeData) {
             setCurrChapter(resumeData.currChapter)
-            scrollBy(resumeData.contentScrollTop)
+            delay(200).then(()=>{
+                scrollBy(resumeData.contentScrollTop)
+            })
         }
     },[resumeData])
 

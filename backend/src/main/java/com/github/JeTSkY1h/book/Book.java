@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Document(collection = "Books")
@@ -18,11 +19,11 @@ public class Book {
     private String title;
     private String author;
     private String filePath;
-    private List<String> genre;private String coverPath;
+    private List<String> genre;
+    private String coverPath;
     private Integer rating;
     private Integer rated;
     private String lang;
-
 
     public Book(String title, String author, String filePath, List<String> genre, String coverPath) {
         this.title = title;

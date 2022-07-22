@@ -28,14 +28,6 @@ public class BookService {
         this.path = path;
     }
 
-    public byte[] getEpub(String id) throws Exception {
-        Book book = getById(id).orElseThrow();
-        InputStream in = getClass()
-                .getResourceAsStream(book.getFilePath());
-        return IOUtil.toByteArray(in);
-
-    }
-
     public Optional<Book> getById(String id) {
         return bookRepo.findById(id);
     }
@@ -123,7 +115,7 @@ public class BookService {
     }
 
     //get average Rating
-    public Book rateBook(String id, Integer rating) throws Exception {
+    public Book rateBook(String id, Integer rating) {
         Book book = getById(id).orElseThrow();
         Integer rated = book.getRated();
         Integer currRating = book.getRating();
