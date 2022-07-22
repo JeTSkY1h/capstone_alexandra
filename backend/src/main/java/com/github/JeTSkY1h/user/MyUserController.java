@@ -31,11 +31,7 @@ public class MyUserController {
 
     @GetMapping("/bookdata")
     ResponseEntity<List<BookUserData>>getBookUserData(Principal principal){
-        Optional<MyUser> user = myUserService.findByUsername(principal.getName());
-        if(user.isEmpty()) {
-            return null;
-        }
-        return ResponseEntity.ok(user.get().getBookData());
+        return ResponseEntity.of(myUserService.findByUsername(principal.getName()).map(user -> user.getBookData()));
     }
 
     @PutMapping("/bookdata")

@@ -476,7 +476,7 @@ public class BookServiceTest {
     }
 
     @Test
-    void shouldgetChapterText(){
+    void shouldGetChapterText(){
         Book expectedBook = new Book();
         expectedBook.setTitle("War and Peace");
         expectedBook.setAuthor("Tolstoy, graf Leo");
