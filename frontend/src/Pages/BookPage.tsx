@@ -30,16 +30,18 @@ export default function BookPage(){
         <>
         <Nav/>
             <div className={"content-wrapper book-page"}>
-                <div className={"image-wrapper"}>
-                    <img src={cover} alt={"book cover"}/>
-                </div>
-                <div className={"book-page-info"}>
-                    <h1>title</h1>
-                    <p>{book?.title}</p>
-                    <h1>Author</h1>
-                    <p>{book?.author}</p>
+                <div>
+                    <div className={"img-wrapper"}>
+                        <img src={cover} alt={"book cover"}/>
+                    </div>
+                    <div className={"book-page-info"}>
+                        <h1>{book?.title}</h1>
+                        <p>{book?.author}</p>
+                    </div>
                 </div>
             </div>
+            <div  className={"desc book-page"}>{book?.description}</div>
+
         </>
     )
 }
