@@ -11,11 +11,14 @@ export default function Main() {
     const [err, setErr] = useState("");
 
     useEffect(()=>{
-        getBooks().then(data=>setBooks(data)).catch(e=>setErr(e))
+        getBooks().then(data=>setBooks(data)).catch(e=> {
+            console.log(e)
+            setErr(e.message);
+        })
         let token = parseJwt();
-        console.log(token);
-        console.log((token.exp - (Date.now() / 1000)))
-        console.log(Date.now() / 1000)
+        if(token.exp - (Date.now() / 1000) < 0){
+            setErr("Login token is expired.")
+        }
     },[])
 
     return(
@@ -24,7 +27,7 @@ export default function Main() {
             <div className={"main"}>
                 {books ?  
                 <Books books={books}/> :
-                 err ? <p>Da ist etwas schief gelaufen.</p> :
+                 err ? <p>{err}</p> :
                  <div> LOADING... </div>}
             </div>
 

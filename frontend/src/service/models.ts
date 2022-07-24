@@ -10,6 +10,8 @@ export interface Book {
     filePath: string,
     genre: string[],
     coverPath: string,
+    description: string,
+    rating: number
 }
 
 export interface ResumeData {

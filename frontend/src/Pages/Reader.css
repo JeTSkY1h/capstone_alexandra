@@ -33,6 +33,7 @@
 }
 
 nav {
+
     position: fixed;
 }
 
@@ -43,6 +44,9 @@ nav {
 .sidebar {
     text-align: left;
     position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
     display: inline-block;
     background-color: #656565;
     transition: margin-left 0.2s;
@@ -51,11 +55,17 @@ nav {
     scrollbar-width: none;
     overflow: scroll;
     width: 120px;
-    max-height: calc(100vh - 80px);
+    height: 100vh;
     margin-right: 1rem;
 }
 
 .sidebar-toggle {
+    padding: 0.5rem;
+    height: 2rem;
+    width: 2rem;
+}
+
+.btn.back {
     padding: 0.5rem;
     height: 2rem;
     width: 2rem;
@@ -85,6 +95,10 @@ nav {
     align-items: center;
 }
 
-.screensize-alert {
-    border: 1px solid red;
+.screen-size-alert {
+    padding: 1rem;
+    color: white;
+    background-color: #24292e;
+    border-radius: 5px;
+    border: 1px solid;
 }
