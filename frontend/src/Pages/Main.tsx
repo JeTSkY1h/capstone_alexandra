@@ -3,7 +3,6 @@ import Nav from "../components/Nav/Nav";
 import Books from "../components/Books/Books";
 import {getBooks, parseJwt} from "../service/apiService"
 import { Book } from "../service/models";
-import "./Main.css"
 
 export default function Main() {
     
