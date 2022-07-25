@@ -1,8 +1,8 @@
-import {useParams} from "react-router-dom";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {getBookData, getChapter, getChapters, setBookData} from "../service/apiService";
+import {useNavigate, useParams} from "react-router-dom";
+import { useCallback, useEffect, useLayoutEffect, useState} from "react";
+import {getBookData, getChapter, getChapters, parseJwt, setBookData} from "../service/apiService";
 import {BsChevronDoubleLeft, BsChevronDoubleRight} from "react-icons/bs";
-import {FaBars, FaTimes} from "react-icons/fa";
+import {FaBars, FaChevronLeft, FaTimes} from "react-icons/fa";
 import "./Reader.css";
 import {ResumeData} from "../service/models";
 
@@ -10,13 +10,13 @@ export default function Reader(){
 
 
     const {id} = useParams()
-    const content = useRef<HTMLDivElement>(null);
     const [resumeData, setResumeData] = useState<ResumeData>();
     const [toc, setToc] = useState<Array<string>>(["fetching Chapters"]);
     const [chapterText, setChapterText] = useState("");
     const [sidebarState, setSidebarState] = useState(false);
     const [currChapter, setCurrChapter] = useState(0);
     const [otherScreen, setOtherScreen] = useState(false);
+    const nav = useNavigate();
 
     const delay = (time: number) =>{
         return new Promise(resolve => setTimeout(resolve,time))
@@ -71,8 +71,6 @@ export default function Reader(){
                             setOtherScreen(true);
                         }
 
-                            //scrollBy(bookData.contentScrollTop)
-
                     } else {
                         setResumeData({
                             bookId: id,
@@ -89,7 +87,6 @@ export default function Reader(){
     },[id])
 
     const resumeDataStuff = useCallback(()=>{
-        console.log("triggered callback")
         if(resumeData) {
             setCurrChapter(resumeData.currChapter)
             delay(200).then(()=>{
@@ -101,6 +98,7 @@ export default function Reader(){
     useLayoutEffect(()=>{
         resumeDataStuff();
     },[resumeData, resumeDataStuff])
+
 
     const scrollBy = (target: number)=> {
         const contentDiv = document.getElementById("test");
@@ -131,11 +129,12 @@ export default function Reader(){
     }
 
     const handleScroll = () => {
-        if( id && content.current && resumeData){
+        if( id && resumeData){
+            const contentDiv = document.getElementById("test");
             let currData = resumeData;
-            currData.contentScrollTop = content.current.scrollTop;
+            currData.contentScrollTop = contentDiv!.scrollTop;
             setResumeData(currData);
-            setBookData(currData).then();
+            setBookData(currData).then(data => console.log(data));
         }
     }
 
@@ -153,38 +152,52 @@ export default function Reader(){
 
     return (
         <>
-            <nav>
-                <button className={"btn sidebar-toggle"} onClick={()=>{setSidebarState(currState=>!currState)}}>
-                    {sidebarState ? <FaTimes/> : <FaBars/>}
+            <div className={sidebarState ? "sidebar" : "sidebar hidden"}>
+                <button>
+                    {parseJwt().sub}
                 </button>
+                <button onClick={()=>nav("/main")}>
+                    <FaChevronLeft /> Zurück
+                </button>
+                <hr/>
+                Kapitel
+                <hr/>
+                {toc.map((chapter, i)=> {
+                    return (
+                        <div>
+                            <button onClick={()=>{setCurrChapter(i)}} className={"chapter-btn"}>
+                                {chapter}
+                            </button>
+                        </div>
+                    )
+                })}
+            </div>
+
+            <nav>
+                <button onClick={()=>nav("/main")} className={"btn back"}>
+                    <FaChevronLeft fontSize={"1rem"}/>
+                </button>
+                <button className={"btn sidebar-toggle"} onClick={()=>{setSidebarState(currState=>!currState)}}>
+                    {sidebarState ? <FaTimes fontSize={"1rem"}/> : <FaBars fontSize={"1rem"}/>}
+                </button>
+
             </nav>
+
             {otherScreen &&
                 <div className={"modal-bg"}>
                     <div className={"screen-size-alert"}>
                         <p>Deine Bildschrimgröße hat sich seit deinem letzten Besuch hier verändert. evt. hat sich deshalb dein lesezeichen verschoben.</p>
-                        <button onClick={()=> {
+                        <button className={"btn"} onClick={()=> {
                             setOtherScreen(false)
                         }}>Bildschirmgröße beibehalten</button>
-                        <button onClick={overwriteScreenSize}>Bildschirmgröße überschreiben</button>
+                        <button className={"btn"} onClick={overwriteScreenSize}>Bildschirmgröße überschreiben</button>
                     </div>
                 </div>
             }
 
                 <div className={otherScreen ? "reader-content blur" : "reader-content"} >
 
-                    <div className={sidebarState ? "sidebar" : "sidebar hidden"}>
-                        {toc.map((chapter, i)=> {
-                            return (
-                                <div>
-                                    <button onClick={()=>{setCurrChapter(i)}} className={"chapter-btn"}>
-                                        {chapter}
-                                    </button>
-                                </div>
-                            )
-                        })}
-                    </div>
-
-                    <div  id={"test"} onScroll={handleScroll} className={sidebarState ? "content hidden" : "content"}>
+                    <div style={{color: "black"}} id={"test"} onScroll={handleScroll} className={sidebarState ? "content hidden" : "content"}>
                         <div dangerouslySetInnerHTML={{__html: chapterText}}/>
                         {currChapter < toc.length && <button onClick={getNextChapter} className={"nextpage"}> <BsChevronDoubleRight/> </button>}
                         {currChapter > 0 && <button onClick={getPreviousChapter} className={"prevpage"}> <BsChevronDoubleLeft/> </button>}

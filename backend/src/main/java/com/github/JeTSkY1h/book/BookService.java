@@ -1,5 +1,6 @@
 package com.github.JeTSkY1h.book;
 
+import com.fasterxml.jackson.databind.deser.DataFormatReaders;
 import nl.siegmann.epublib.domain.*;
 import nl.siegmann.epublib.epub.EpubReader;
 import nl.siegmann.epublib.service.MediatypeService;
@@ -11,10 +12,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
-import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 @Service
 public class BookService {
@@ -53,6 +52,10 @@ public class BookService {
                 bookRes.setFilePath(bookFile.getPath());
                 bookRes.setGenre(book.getMetadata().getSubjects());
                 bookRes.setTitle(book.getTitle());
+                System.out.println(book.getMetadata().getDescriptions());
+                if(book.getMetadata().getDescriptions().size() > 0) {
+                    bookRes.setDescription(book.getMetadata().getDescriptions().get(0));
+                }
                 res.add(bookRes);
             } catch (Exception e) {
                 System.err.println(e.getMessage());
@@ -74,6 +77,7 @@ public class BookService {
             nl.siegmann.epublib.domain.Book epubBook = epubReader.readEpub(fIn);
             List<TOCReference> tocReferences = epubBook.getTableOfContents().getTocReferences();
             List<SpineReference> spineReferences = epubBook.getSpine().getSpineReferences();
+            System.out.println(epubBook.getResources().getResourcesByMediaType(MediatypeService.CSS));
             List<String> chapters = new ArrayList<>();
             if (tocReferences.size() < spineReferences.size()) {
                 for (int i = 0; i < spineReferences.size(); i++) {
@@ -82,7 +86,6 @@ public class BookService {
                     chapters.add(res);
                 }
             } else {
-
                 for (int i = 0; i < tocReferences.size(); i++) {
                     TOCReference resource = tocReferences.get(i);
                     String res = resource.getTitle() == null ? "kapitel" + i : resource.getTitle();
@@ -107,7 +110,12 @@ public class BookService {
             if (m.find()) {
                 res = m.replaceAll("<img src=\"" + "/api/books/" + id + "/images/$1$2" + "/>");
             }
-            res = res.replaceAll("<a.*href=.*>", "<p>").replaceAll("</a>", "</p>");
+            res = res
+                    .replaceAll("<a.*href=.*>", "<p>")
+                    .replaceAll("</a>", "</p>");
+
+
+
             return res;
         } catch (Exception e) {
             return "Es gab einen Fehler Beim Laden des Kapitels.";
@@ -125,7 +133,7 @@ public class BookService {
         return bookRepo.save(book);
     }
 
-    public byte[] getResourceImg(String id, String resHref) throws Exception {
+    public byte[] getResource(String id, String resHref) throws Exception {
         Book book = getById(id).orElseThrow();
         try (FileInputStream fIn = new FileInputStream(book.getFilePath())) {
             nl.siegmann.epublib.domain.Book ebupBook = epubReader.readEpub(fIn);

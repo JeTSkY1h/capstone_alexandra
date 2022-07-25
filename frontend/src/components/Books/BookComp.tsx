@@ -1,8 +1,8 @@
 import { Book } from "../../service/models"
-import "./BookComp.css"
 import {useEffect, useState} from "react";
 import {getCover} from "../../service/apiService";
-import { NavLink} from "react-router-dom";
+import {Link} from "react-router-dom";
+import {Button, Card, Image, Text} from "@mantine/core";
 
 
 interface BookProps {
@@ -21,26 +21,17 @@ export default function BookComp(props: BookProps){
     },[props])
 
     return (
-        <NavLink to={"/book/"+ props.book.id} style={{ textDecoration: 'none' }}>
-            <div className="book-card">
-                <div className="cover-img-wrapper">
-                    <img src={cover} alt={"Buch Cover"}/>
-                </div>
-                <div className={"book-card-info-wrapper"}>
-                    <h1>{props.book.title.length >= 40 ? props.book.title.slice(0,35) + "...": props.book.title}</h1>
-                </div>
-
-                <NavLink to={"/reader/" + props.book.id}>
-                    <button className={"btn small"}>
-                        Read
-                    </button>
-                </NavLink>
-            </div>
-
-        </NavLink>
-
-
-
+            <Card style={{width: 144}} shadow="sm" p={"sm"}>
+                <Card.Section component={Link} to={"/book/" + props.book.id} >
+                    <Image src={cover} height={220} fit={"cover"}></Image>
+                </Card.Section>
+                <Text lineClamp={1} weight={600} size={"sm"} style={{marginTop: 8, marginBottom: 8}}>
+                    {props.book.title}
+                </Text>
+                <Button component={Link} to={"/reader/" + props.book.id}>
+                    Read
+                </Button>
+            </Card>
 
     )
 }

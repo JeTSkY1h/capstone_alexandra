@@ -1,8 +1,6 @@
 .react-content-wrapper {
-    z-index: 0;
     position: absolute;
-    top: 0px;
-    height: calc(100vh);
+    height: calc(100vh - 56px);
     width: 100%;
     display: flex;
     align-items: center;
@@ -25,5 +23,5 @@
 .landing-form-btn {
     margin: 0.5rem 0 0.5rem 0;
     height: 60px;
-    border-radius: 0px 5px 5px 0px;
+    border-radius: 0 5px 5px 0;
 }

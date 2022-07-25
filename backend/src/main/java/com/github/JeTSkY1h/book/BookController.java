@@ -2,8 +2,6 @@ package com.github.JeTSkY1h.book;
 
 
 import lombok.RequiredArgsConstructor;
-import nl.siegmann.epublib.epub.EpubReader;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,7 +21,7 @@ public class BookController {
     private final BookService bookService;
 
     @PutMapping("/{id}/rate")
-    ResponseEntity<Book> rateBook(@PathVariable String id, @RequestBody Integer newRating) throws Exception {
+    ResponseEntity<Book> rateBook(@PathVariable String id, @RequestBody Integer newRating) {
         return ResponseEntity.of(Optional.of(bookService.rateBook(id, newRating)));
     }
 
@@ -47,9 +45,16 @@ public class BookController {
             produces= MediaType.IMAGE_JPEG_VALUE
     )
     public @ResponseBody byte[] getResourceImgImg(@PathVariable String id, @PathVariable String resHref ) throws Exception{
-        return bookService.getResourceImg(id, resHref);
+        return bookService.getResource(id, resHref);
     }
 
+    @GetMapping(
+            value="/{id}/css/{resHref}",
+            produces = "text/css"
+    )
+    public @ResponseBody byte[] getResourceCSS(@PathVariable String id, @PathVariable String resHref) throws Exception {
+        return bookService.getResource(id, resHref);
+    }
 
     @GetMapping(
             value="/cover/{id}",
