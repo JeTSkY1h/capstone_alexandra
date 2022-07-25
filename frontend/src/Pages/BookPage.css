@@ -1,8 +1,31 @@
 .book-page {
+    margin: 60px auto auto auto;
+
+    max-width: 960px;
+    color: white;
     padding-top: 80px;
     justify-content: left;
+    background-color: #656565;
+    height: 100vh;
 }
 
+.img-wrapper {
+    margin-left: 1rem;
+    width: 248px !important;
+}
+
+.img-wrapper > img {
+    width: 100%;
+}
 .book-page-info {
     margin-left: 1rem;
+}
+
+.book-page-info > h1 {
+    grid-area: title;
+    margin: 0 1rem 0.5rem 0;
+}
+
+.desc {
+    grid-area: description;
 }
