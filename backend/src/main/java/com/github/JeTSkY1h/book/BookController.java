@@ -2,6 +2,7 @@ package com.github.JeTSkY1h.book;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,8 +22,8 @@ public class BookController {
     private final BookService bookService;
 
     @PutMapping("/{id}/rate")
-    ResponseEntity<Book> rateBook(@PathVariable String id, @RequestBody Integer newRating) {
-        return ResponseEntity.of(Optional.of(bookService.rateBook(id, newRating)));
+    ResponseEntity<Book> rateBook(@PathVariable String id, @RequestBody RatingResponse ratingResponse) {
+        return ResponseEntity.of(Optional.of(bookService.rateBook(id, ratingResponse.getRating())));
     }
 
     @GetMapping("/refresh")
