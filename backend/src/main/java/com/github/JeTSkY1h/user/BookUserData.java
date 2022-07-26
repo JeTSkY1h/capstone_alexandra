@@ -14,4 +14,5 @@ public class BookUserData {
     int contentHeight;
     int contentScrollTop;
     int currChapter;
+    int timeRead;
 }

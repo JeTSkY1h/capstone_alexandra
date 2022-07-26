@@ -13,7 +13,7 @@ export function rateBook(id: string, rating: number){
     return axios.put("/api/books/" + id + "/rate", {rating}, requestConfig()).then(res=>res.data);
 }
 
-export function setBookData(bookData: ResumeData){
+export function postBookData(bookData: ResumeData){
     return axios.put("/api/user/bookdata", bookData, requestConfig()).then(res=>res.data)
 }
 
@@ -31,7 +31,7 @@ export function parseJwt(){
         }).join(''));
         return JSON.parse(jsonPayload);
     } else {
-        return "No Logintoken found. Are ypu logged in?"
+        return "No Login token found. Are you logged in?"
     }
 }
 

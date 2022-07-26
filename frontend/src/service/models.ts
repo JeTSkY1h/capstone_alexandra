@@ -20,4 +20,5 @@ export interface ResumeData {
     contentHeight: number;
     contentScrollTop: number;
     currChapter: number;
+    timeRead: number;
 }

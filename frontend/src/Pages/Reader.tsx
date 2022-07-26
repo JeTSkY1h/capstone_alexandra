@@ -1,26 +1,36 @@
 import {useNavigate, useParams} from "react-router-dom";
 import { useCallback, useEffect, useLayoutEffect, useState} from "react";
-import {getBookData, getChapter, getChapters, parseJwt, setBookData} from "../service/apiService";
+import {getBookData, getChapter, getChapters, postBookData} from "../service/apiService";
 import {BsChevronDoubleLeft, BsChevronDoubleRight} from "react-icons/bs";
-import {FaBars, FaChevronLeft, FaTimes} from "react-icons/fa";
+import { FaChevronLeft} from "react-icons/fa";
 import "./Reader.css";
 import {ResumeData} from "../service/models";
+import {UserButton} from "../components/Nav/UserButton/UserButton";
+import {useBooleanToggle, useInterval} from "@mantine/hooks";
+import {Burger, Drawer, Paper, Title, Tooltip, UnstyledButton} from "@mantine/core";
+
 
 export default function Reader(){
-
 
     const {id} = useParams()
     const [resumeData, setResumeData] = useState<ResumeData>();
     const [toc, setToc] = useState<Array<string>>(["fetching Chapters"]);
     const [chapterText, setChapterText] = useState("");
-    const [sidebarState, setSidebarState] = useState(false);
+    const [drawerState, toggleDrawerState] = useBooleanToggle(false);
     const [currChapter, setCurrChapter] = useState(0);
     const [otherScreen, setOtherScreen] = useState(false);
     const nav = useNavigate();
+    const [seconds, setSeconds] = useState(0);
+    const interval = useInterval(()=>setSeconds(s=>s+1),1000);
 
     const delay = (time: number) =>{
         return new Promise(resolve => setTimeout(resolve,time))
     }
+
+useEffect(()=>{
+    interval.start()
+    return interval.stop();
+},[]);
 
     const getNewChapter =  useCallback(()=> {
         if(id) {
@@ -30,8 +40,9 @@ export default function Reader(){
                 let currData = resumeData;
                  if(currData) {
                      currData.currChapter = currChapter;
+                     currData.timeRead = seconds;
                      setResumeData(currData);
-                     setBookData(currData).then(data=>console.log(data))
+                     postBookData(currData).then(data=>console.log(data))
               }
             }).catch(()=>{
                 setChapterText("<div style='color: red'>Das Kapitel konnte nicht geladen werden</div>")
@@ -46,58 +57,77 @@ export default function Reader(){
         getNewChapter();
     },[currChapter, getNewChapter])
 
-
     useLayoutEffect(()=>{
+        const content = document.getElementById("test");
         if(id) {
             getChapters(id).then(data => {
                 setToc(data)
             })
             getBookData().then((data: ResumeData[]) => {
-                const content = document.getElementById("test");
                 if (!data) {
-                    setResumeData({
+                    let bookData = {
                         bookId: id,
                         currChapter: currChapter,
                         contentHeight: content!.offsetHeight,
                         contentWidth: content!.offsetWidth,
-                        contentScrollTop: content!.scrollTop
-                    })
+                        contentScrollTop: content!.scrollTop,
+                        timeRead: 0,
+                    }
+                    postBookData(bookData).then(data=>console.log(data));
+                    setResumeData(bookData);
                     setCurrChapter(0)
-                } else {
-                    let bookData = data.filter((bookdata: ResumeData) => bookdata.bookId === id)[0]
-                    if (bookData) {
-                        setResumeData(bookData)
-                   if ( content && (content.offsetWidth !== bookData.contentWidth || content.offsetHeight !== bookData.contentHeight)) {
+                }
+                let bookData = data.filter((bookdata: ResumeData) => bookdata.bookId === id)[0]
+
+                if (bookData) {
+                    setResumeData(bookData)
+                    if ( content && (content.offsetWidth !== bookData.contentWidth || content.offsetHeight !== bookData.contentHeight)) {
                             setOtherScreen(true);
                         }
 
-                    } else {
-                        setResumeData({
+                } else {
+
+                        let bookData = {
                             bookId: id,
                             currChapter: currChapter,
                             contentHeight: content!.offsetHeight,
                             contentWidth: content!.offsetWidth,
-                            contentScrollTop: content!.scrollTop
-                        })
-                    }
+                            contentScrollTop: content!.scrollTop,
+                            timeRead: 0,
+                        }
+                        setResumeData(bookData);
                 }
+
+
+            }).catch(e=>{
+                console.log(e);
+                setResumeData({
+                    bookId: id,
+                    currChapter: currChapter,
+                    contentHeight: content!.offsetHeight,
+                    contentWidth: content!.offsetWidth,
+                    contentScrollTop: content!.scrollTop,
+                    timeRead: 0,
+                })
             })
         }
         //eslint-disable-next-line
     },[id])
 
-    const resumeDataStuff = useCallback(()=>{
+    const firstRender = useCallback(()=>{
         if(resumeData) {
             setCurrChapter(resumeData.currChapter)
             delay(200).then(()=>{
                 scrollBy(resumeData.contentScrollTop)
             })
+
         }
     },[resumeData])
 
     useLayoutEffect(()=>{
-        resumeDataStuff();
-    },[resumeData, resumeDataStuff])
+        firstRender();
+    },[resumeData, firstRender])
+
 
 
     const scrollBy = (target: number)=> {
@@ -133,8 +163,9 @@ export default function Reader(){
             const contentDiv = document.getElementById("test");
             let currData = resumeData;
             currData.contentScrollTop = contentDiv!.scrollTop;
+            currData.timeRead = seconds;
             setResumeData(currData);
-            setBookData(currData).then(data => console.log(data));
+            postBookData(currData).then(data => console.log(data));
         }
     }
 
@@ -146,40 +177,47 @@ export default function Reader(){
             currData.contentWidth = contentDiv.offsetWidth;
             currData.contentHeight = contentDiv.offsetHeight;
             setResumeData(currData);
-            setBookData(currData).then(data=>console.log(data))
+            postBookData(currData).then(data=>console.log(data))
         }
     }
 
     return (
         <>
-            <div className={sidebarState ? "sidebar" : "sidebar hidden"}>
-                <button>
-                    {parseJwt().sub}
-                </button>
-                <button onClick={()=>nav("/main")}>
-                    <FaChevronLeft /> Zurück
-                </button>
-                <hr/>
-                Kapitel
-                <hr/>
+            <Drawer opened={drawerState} onClose={()=>toggleDrawerState()}>
+
+                <UserButton/>
+
                 {toc.map((chapter, i)=> {
                     return (
                         <div>
-                            <button onClick={()=>{setCurrChapter(i)}} className={"chapter-btn"}>
-                                {chapter}
-                            </button>
+                            <UnstyledButton onClick={()=>{
+                                setCurrChapter(i)
+                                toggleDrawerState();
+                            }} className={"chapter-btn"}>
+                                <Title order={3} sx={(theme)=>({
+
+                                    '&:hover': {
+                                        color: theme.colorScheme === "dark" ? theme.colors.gray[0] : theme.colors.dark[9]
+                                    }
+                                })}>{chapter}</Title>
+                            </UnstyledButton>
                         </div>
                     )
                 })}
-            </div>
+            </Drawer>
 
             <nav>
                 <button onClick={()=>nav("/main")} className={"btn back"}>
                     <FaChevronLeft fontSize={"1rem"}/>
                 </button>
-                <button className={"btn sidebar-toggle"} onClick={()=>{setSidebarState(currState=>!currState)}}>
-                    {sidebarState ? <FaTimes fontSize={"1rem"}/> : <FaBars fontSize={"1rem"}/>}
-                </button>
+                <Tooltip label={"Open Chapter List"}>
+              <Burger opened={drawerState}
+                      onClick={()=>toggleDrawerState()}
+                      title={drawerState? "close sidebar" : "open sidebar"}
+                      style={{float: "right"}}
+              />
+                </Tooltip>
+
 
             </nav>
 
@@ -197,11 +235,18 @@ export default function Reader(){
 
                 <div className={otherScreen ? "reader-content blur" : "reader-content"} >
 
-                    <div style={{color: "black"}} id={"test"} onScroll={handleScroll} className={sidebarState ? "content hidden" : "content"}>
+                    <Paper id={"test"} onScroll={handleScroll} style={{
+                        position: "relative",
+                        margin: "1rem",
+                        paddingLeft: "2rem",
+                        paddingRight: "2rem",
+                        overflowY: "scroll",
+                        height: "calc(100vh - 80px - 2rem)",
+                    }}>
                         <div dangerouslySetInnerHTML={{__html: chapterText}}/>
                         {currChapter < toc.length && <button onClick={getNextChapter} className={"nextpage"}> <BsChevronDoubleRight/> </button>}
                         {currChapter > 0 && <button onClick={getPreviousChapter} className={"prevpage"}> <BsChevronDoubleLeft/> </button>}
-                    </div>
+                    </Paper>
 
                 </div>
         </>
