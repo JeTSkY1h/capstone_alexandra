@@ -188,7 +188,7 @@ public class AlexandraIntegrationTest {
         }
 
         //set UserBookData
-        BookUserData bookUserData = new BookUserData("test123", 200, 200, 200, 3);
+        BookUserData bookUserData = new BookUserData("test123", 200, 200, 200, 3, 34);
         ResponseEntity<BookUserData[]> putResp = restTemplate.exchange("/api/user/bookdata",
                 HttpMethod.PUT,
                 new HttpEntity<>(bookUserData, createHeaders(jwtAdmin)),
