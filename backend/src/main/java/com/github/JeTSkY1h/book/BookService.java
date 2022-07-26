@@ -38,6 +38,7 @@ public class BookService {
     public List<Book> refresh() {
         List<File> books;
         File f = new File(path);
+        //Todo Check in DB for dubles
         books = Arrays.stream(f.listFiles()).filter(bookFile -> bookFile.getAbsolutePath().endsWith(".epub")).toList();
         List<Book> res = new ArrayList<>();
         for (File bookFile : books) {
@@ -126,11 +127,16 @@ public class BookService {
     public Book rateBook(String id, Integer rating) {
         Book book = getById(id).orElseThrow();
         Integer rated = book.getRated();
+        if(rated == null) rated = 0;
         Integer currRating = book.getRating();
-        book.setRated(rated + 1);
-        Integer newRating = (rating - currRating) / rated;
-        book.setRating(newRating + currRating);
-        return bookRepo.save(book);
+        if(currRating == null) currRating = 0;
+        rated++;
+        book.setRated(rated);
+        double newRating = (rating - currRating) / rated;
+        Integer res = (int)newRating + currRating;
+        book.setRating(res);
+        bookRepo.save(book);
+        return book;
     }
 
     public byte[] getResource(String id, String resHref) throws Exception {

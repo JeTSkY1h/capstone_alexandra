@@ -541,4 +541,29 @@ public class BookServiceTest {
                 """);
     }
 
+    @Test
+    void shouldRateBook(){
+        Book expectedBook = new Book();
+        expectedBook.setTitle("War and Peace");
+        expectedBook.setAuthor("Tolstoy, graf Leo");
+        expectedBook.setFilePath((bookpath + sep + "pg2600.epub").replace("/C:", "C:").replace("/", sep ));
+        expectedBook.setGenre(List.of("Historical fiction", "War stories", "Napoleonic Wars, 1800-1815 -- Campaigns -- Russia -- Fiction", "Russia -- History -- Alexander I, 1801-1825 -- Fiction", "Aristocracy (Social class) -- Russia -- Fiction"));
+        expectedBook.setCoverPath((bookpath +  sep + "WarandPeace.png").replace("/C:", "C:").replace("/", sep ));
+        expectedBook.setRating(1);
+        expectedBook.setRated(1);
+        Book ratedExpBook = new Book();
+        ratedExpBook.setTitle("War and Peace");
+        ratedExpBook.setAuthor("Tolstoy, graf Leo");
+        ratedExpBook.setFilePath((bookpath + sep + "pg2600.epub").replace("/C:", "C:").replace("/", sep ));
+        ratedExpBook.setGenre(List.of("Historical fiction", "War stories", "Napoleonic Wars, 1800-1815 -- Campaigns -- Russia -- Fiction", "Russia -- History -- Alexander I, 1801-1825 -- Fiction", "Aristocracy (Social class) -- Russia -- Fiction"));
+        ratedExpBook.setCoverPath((bookpath +  sep + "WarandPeace.png").replace("/C:", "C:").replace("/", sep ));
+        ratedExpBook.setRated(2);
+        ratedExpBook.setRating(3);
+        Mockito.when(bookRepo.findById("test123")).thenReturn(Optional.of(expectedBook));
+        Book actual = bookService.rateBook("test123", 5);
+        System.out.println(actual);
+        Assertions.assertThat(actual).isEqualTo(ratedExpBook);
+
+
+    }
 }

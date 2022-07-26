@@ -1,9 +1,11 @@
 import Nav from "../components/Nav/Nav";
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {getBook, getCover} from "../service/apiService";
+import {getBook, getCover,} from "../service/apiService";
 import {Book} from "../service/models";
 import "./BookPage.css";
+import {Container, Group, Image, Stack, Text, Title} from "@mantine/core";
+import {Rating} from "../components/Rating/Rating";
 
 export default function BookPage(){
     const {id} = useParams();
@@ -29,18 +31,16 @@ export default function BookPage(){
     return (
         <>
         <Nav/>
-            <div className={"content-wrapper book-page"}>
-                <div>
-                    <div className={"img-wrapper"}>
-                        <img src={cover} alt={"book cover"}/>
-                    </div>
-                    <div className={"book-page-info"}>
-                        <h1>{book?.title}</h1>
-                        <p>{book?.author}</p>
-                    </div>
-                </div>
-            </div>
-            <div  className={"desc book-page"}>{book?.description}</div>
+            <Container fluid p={8}>
+                <Group align={"flex-start"}>
+                    <Image src={cover} alt={"cover"} width={300}/>
+                    <Stack>
+                        <Title order={1}>{book?.title}</Title>
+                        <Text>{book?.author}</Text>
+                        {id && <Rating rating={book?.rating} id={id}></Rating>}
+                    </Stack>
+                </Group>
+            </Container>
 
         </>
     )
