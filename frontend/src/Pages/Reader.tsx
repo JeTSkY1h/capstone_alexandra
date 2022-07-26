@@ -30,7 +30,7 @@ export default function Reader(){
 useEffect(()=>{
     interval.start()
     return interval.stop();
-},[]);
+},[interval]);
 
     const getNewChapter =  useCallback(()=> {
         if(id) {
