@@ -26,7 +26,6 @@ export default function Reader(){
         if(id) {
             getChapter(id, currChapter).then(data => {
                 setChapterText(data)
-                console.log(data)
             }).then(()=>{
                 let currData = resumeData;
                  if(currData) {
@@ -72,11 +71,6 @@ export default function Reader(){
                             setOtherScreen(true);
                         }
 
-                        delay(200).then(()=>{
-                            scrollByTESt(bookData.contentScrollTop)
-                        })
-                            //scrollBy(bookData.contentScrollTop)
-
                     } else {
                         setResumeData({
                             bookId: id,
@@ -93,13 +87,10 @@ export default function Reader(){
     },[id])
 
     const resumeDataStuff = useCallback(()=>{
-        console.log("triggered callback")
         if(resumeData) {
             setCurrChapter(resumeData.currChapter)
             delay(200).then(()=>{
-                console.log("TEST")
-                console.log(resumeData.contentScrollTop)
-                scrollByTESt(resumeData.contentScrollTop)
+                scrollBy(resumeData.contentScrollTop)
             })
         }
     },[resumeData])
@@ -109,9 +100,8 @@ export default function Reader(){
     },[resumeData, resumeDataStuff])
 
 
-    const scrollByTESt = (target: number)=> {
+    const scrollBy = (target: number)=> {
         const contentDiv = document.getElementById("test");
-        console.log(contentDiv)
         if(contentDiv) {
             contentDiv.scrollTo(0,target)
         } else {
