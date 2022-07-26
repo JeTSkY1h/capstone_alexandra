@@ -12,7 +12,7 @@ export const Rating = ({rating, id}: RatingProps) => {
     let Stars = [];
     for (let i = 1; i < 6; i++) {
         Stars.push(<UnstyledButton onClick={()=>{
-            rateBook(id, i).then(data => rating = data)
+            rateBook(id, i).then(data => data)
         }}>{rating && i <= rating ? <AiFillStar/> : <AiOutlineStar/>}</UnstyledButton> )
     }
 
