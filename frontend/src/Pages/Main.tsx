@@ -21,7 +21,7 @@ export default function Main() {
             setErr("Login token is expired.")
             nav("/login")
         }
-    },[])
+    },[nav])
 
     return(
         <>
