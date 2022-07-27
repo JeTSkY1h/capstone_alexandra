@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {getCover} from "../../service/apiService";
 import {Link} from "react-router-dom";
 import {Button, Card, Image, Text} from "@mantine/core";
+import {Rating} from "../Rating/Rating";
 
 
 interface BookProps {
@@ -28,6 +29,7 @@ export default function BookComp(props: BookProps){
                 <Text lineClamp={1} weight={600} size={"sm"} style={{marginTop: 8, marginBottom: 8}}>
                     {props.book.title}
                 </Text>
+                <Rating id={props.book.id} rating={props.book.rating}/>
                 <Button component={Link} to={"/reader/" + props.book.id}>
                     Read
                 </Button>

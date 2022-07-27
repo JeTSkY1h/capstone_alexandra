@@ -41,7 +41,7 @@ export default function BookPage(){
             <Container fluid p={8}>
                 <Group align={"flex-start"} noWrap>
                     <Image src={cover} alt={"cover"} width={300}/>
-                    <Stack>
+                    <Stack style={{maxWidth: "900px"}}>
                         <Title order={1}>{book?.title}</Title>
                         <Text>{book?.author}</Text>
                         {bookData &&

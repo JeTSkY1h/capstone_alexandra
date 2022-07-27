@@ -127,9 +127,7 @@ useEffect(()=>{
     useLayoutEffect(()=>{
         firstRender();
     },[resumeData, firstRender])
-
-
-
+    
     const scrollBy = (target: number)=> {
         const contentDiv = document.getElementById("test");
         if(contentDiv) {

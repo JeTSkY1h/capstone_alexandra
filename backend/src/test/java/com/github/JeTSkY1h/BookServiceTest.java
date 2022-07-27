@@ -19,8 +19,8 @@ public class BookServiceTest {
 
     String sep = File.separator;
     BookRepo bookRepo = Mockito.mock(BookRepo.class);
-    String bookpath = BookServiceTest.class.getResource("books").getPath();
-    BookService bookService = new BookService(bookRepo, bookpath);
+    String bookpath = System.getProperty("user.dir") + File.separator + ".." + File.separator + "Books";
+    BookService bookService = new BookService(bookRepo);
 
     @Test
     void shouldAddBooks() {
@@ -30,10 +30,11 @@ public class BookServiceTest {
         expectedBook.setFilePath((bookpath + sep + "pg2600.epub").replace("/C:", "C:").replace("/", sep ));
         expectedBook.setGenre(List.of("Historical fiction", "War stories", "Napoleonic Wars, 1800-1815 -- Campaigns -- Russia -- Fiction", "Russia -- History -- Alexander I, 1801-1825 -- Fiction", "Aristocracy (Social class) -- Russia -- Fiction"));
         expectedBook.setCoverPath((bookpath +  sep + "WarandPeace.png").replace("/C:", "C:").replace("/", sep ));
+        expectedBook.setDescription("In Russia's struggle with Napoleon, Tolstoy saw a tragedy that involved all mankind. Greater than a historical chronicle, War and Peace is an affirmation of life itself, `a complete picture', as a contemporary reviewer put it, `of everything in which people find their happiness and greatness, their grief and humiliation'. Tolstoy gave his personal approval to this translation, published here in a new single volume edition, which includes an introduction by Henry Gifford, and Tolstoy's important essay `Some Words about War and Peace'.");
         List<Book> books = bookService.refresh();
         Mockito.verify(bookRepo).saveAll(books);
         System.out.println(books);
-        Assertions.assertThat(books.get(0)).isEqualTo(expectedBook);
+        Assertions.assertThat(books.get(1)).isEqualTo(expectedBook);
     }
 
     @Test
