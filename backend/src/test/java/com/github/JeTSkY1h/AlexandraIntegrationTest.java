@@ -87,10 +87,10 @@ public class AlexandraIntegrationTest {
                 Book[].class
         );
         Assertions.assertThat(books.getStatusCode()).isEqualTo(HttpStatus.OK);
-        Assertions.assertThat(books.getBody()[0].getTitle()).isEqualTo("War and Peace");
+        Assertions.assertThat(books.getBody()[1].getTitle()).isEqualTo("War and Peace");
 
         //getChapterList
-        ResponseEntity<String[]> chapters = restTemplate.exchange("/api/books/" + books.getBody()[0].getId() + "/chapter",
+        ResponseEntity<String[]> chapters = restTemplate.exchange("/api/books/" + books.getBody()[1].getId() + "/chapter",
                 HttpMethod.GET,
                 new HttpEntity<>( createHeaders(jwtAdmin)),
                 String[].class
@@ -99,7 +99,7 @@ public class AlexandraIntegrationTest {
 
 
         //getChapter
-        ResponseEntity<String> chapterText = restTemplate.exchange("/api/books/" + books.getBody()[0].getId() + "/chapter/3",
+        ResponseEntity<String> chapterText = restTemplate.exchange("/api/books/" + books.getBody()[1].getId() + "/chapter/3",
                 HttpMethod.GET,
                 new HttpEntity<>(createHeaders(jwtAdmin)),
                 String.class
@@ -173,13 +173,13 @@ public class AlexandraIntegrationTest {
                 """);
 
         //getCover image
-        ResponseEntity<byte[]> coverPic = restTemplate.exchange("/api/books/cover/" + books.getBody()[0].getId(),
+        ResponseEntity<byte[]> coverPic = restTemplate.exchange("/api/books/cover/" + books.getBody()[1].getId(),
                 HttpMethod.GET,
                 new HttpEntity<>(createHeaders(jwtAdmin)),
                 byte[].class
         );
         byte[] expected;
-        try(InputStream in = new BufferedInputStream(new FileInputStream(books.getBody()[0].getCoverPath()))) {
+        try(InputStream in = new BufferedInputStream(new FileInputStream(books.getBody()[1].getCoverPath()))) {
             expected = IOUtil.toByteArray(in);
             Assertions.assertThat(coverPic.getBody()).isEqualTo(expected);
         } catch(Exception e) {

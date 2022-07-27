@@ -19,12 +19,11 @@ import java.util.regex.Pattern;
 public class BookService {
 
     private final BookRepo bookRepo;
-    private final String path;
+    private  String path = System.getProperty("user.dir") + File.separator + ".." + File.separator + "Books";
     EpubReader epubReader = new EpubReader();
 
-    public BookService(BookRepo bookRepo, @Value("${app.book.path}") String path) {
+    public BookService(BookRepo bookRepo) {
         this.bookRepo = bookRepo;
-        this.path = path;
     }
 
     public Optional<Book> getById(String id) {

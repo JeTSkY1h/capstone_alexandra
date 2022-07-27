@@ -11,14 +11,16 @@ export const Rating = ({rating, id}: RatingProps) => {
 
     let Stars = [];
     for (let i = 1; i < 6; i++) {
-        Stars.push(<UnstyledButton onClick={()=>{
+        Stars.push(<UnstyledButton
+                style={{color: "yellow"}}
+            onClick={()=>{
             rateBook(id, i).then(data => data)
         }}>{rating && i <= rating ? <AiFillStar/> : <AiOutlineStar/>}</UnstyledButton> )
     }
 
     return (
         <>
-            <Group>
+            <Group spacing={0} my={8}>
                 {Stars}
             </Group>
         </>

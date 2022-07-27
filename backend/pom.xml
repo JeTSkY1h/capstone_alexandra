@@ -3,14 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.github.gossie</groupId>
-        <artifactId>spring-boot-react-bundle-parent</artifactId>
+        <groupId>com.github.JeTSkY1h</groupId>
+        <artifactId>alexandra_capstone-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>spring-boot-react-bundle-backend</artifactId>
+    <artifactId>capstone_alexandra-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>spring-boot-react-bundle-backend</name>
-    <description>Demo to deploy frontend and backend</description>
+    <name>capstone_alexandra-backend</name>
+    <description>Alexandra Online Library</description>
     <repositories>
         <repository>
             <id>psiegman-repo</id>
