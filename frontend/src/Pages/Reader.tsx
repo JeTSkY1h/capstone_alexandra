@@ -40,7 +40,7 @@ useEffect(()=>{
                 let currData = resumeData;
                  if(currData) {
                      currData.currChapter = currChapter;
-                     currData.timeRead = seconds;
+                     currData.timeRead += seconds;
                      setResumeData(currData);
                      postBookData(currData).then(data=>console.log(data))
               }
@@ -161,7 +161,7 @@ useEffect(()=>{
             const contentDiv = document.getElementById("test");
             let currData = resumeData;
             currData.contentScrollTop = contentDiv!.scrollTop;
-            currData.timeRead = seconds;
+            currData.timeRead += seconds;
             setResumeData(currData);
             postBookData(currData).then(data => console.log(data));
         }

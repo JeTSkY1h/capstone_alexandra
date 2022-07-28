@@ -9,6 +9,10 @@ const requestConfig = () => {
     }
 }
 
+export function searchBook(query: string){
+    return axios.get("/api/books/search/" + query, requestConfig()).then(res=>res.data);
+}
+
 export function rateBook(id: string, rating: number){
     return axios.put("/api/books/" + id + "/rate", {rating}, requestConfig()).then(res=>res.data);
 }

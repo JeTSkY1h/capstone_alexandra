@@ -7,6 +7,7 @@ interface InputProps {
     label: string;
     type?: string;
     autofocus?: boolean;
+    height?: number;
 }
 
 export default function Input(props: InputProps){
@@ -36,7 +37,6 @@ export default function Input(props: InputProps){
     return (
         <div className="my-input-wrapper">
             <label className={active ? "active" : ""} htmlFor={id}>{props.label}</label>
-
             {props.autofocus ?
                 <input
                     autoFocus

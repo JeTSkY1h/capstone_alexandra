@@ -21,6 +21,11 @@ import java.util.Optional;
 public class BookController {
     private final BookService bookService;
 
+    @GetMapping("/search/{query}")
+    ResponseEntity<List<Book>> searchBookBytitle(@PathVariable String query){
+        return ResponseEntity.ok(bookService.searchByTitle(query));
+    }
+
     @PutMapping("/{id}/rate")
     ResponseEntity<Book> rateBook(@PathVariable String id, @RequestBody RatingResponse ratingResponse) {
         return ResponseEntity.of(Optional.of(bookService.rateBook(id, ratingResponse.getRating())));
