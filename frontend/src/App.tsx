@@ -13,6 +13,7 @@ function App() {
         <Route path="/" element={<Landing/>} />
         <Route path="/register" element={<Register/>} />
         <Route path="/login" element={<Login/>} />
+        <Route path="/main/:query" element={<Main />} />
         <Route path="/main" element={<Main />} />
         <Route path="/reader/:id" element={<Reader />} />
         <Route path="/book/:id" element={<BookPage/>}/>

@@ -10,12 +10,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig  {
 
     private final JwtAuthFilter jwtAuthFilter;
+
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -25,7 +27,7 @@ public class SecurityConfig  {
                 .antMatchers(HttpMethod.GET, "/api/books/*/images/**").permitAll()
                 .antMatchers(HttpMethod.GET, "**.css").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/user", "/api/auth").permitAll()
-                .antMatchers(HttpMethod.GET, "/*", "/index*", "/static/**", "/*.js", "/*.json").permitAll()
+                .antMatchers(HttpMethod.GET,    "/*", "/index*", "/static/**", "/*.js", "/*.json").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/books/refresh").hasRole("admin")
                 .antMatchers("/**").authenticated()
                 .and()

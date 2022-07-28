@@ -100,8 +100,6 @@ public class BookService {
         Book book = getById(id).orElseThrow();
         try (FileInputStream fIn = new FileInputStream(book.getFilePath())) {
             nl.siegmann.epublib.domain.Book ebupBook = epubReader.readEpub(fIn);
-            Collection<Resource> resources = ebupBook.getResources().getResourcesByMediaType(MediatypeService.JPG);
-            System.out.println(resources);
             List<SpineReference> references = ebupBook.getSpine().getSpineReferences();
             String xhtmlString = new String(references.get(chapter).getResource().getData());
             Pattern p = Pattern.compile("<img src=\"(.*?\")(.*)/>");
@@ -144,5 +142,9 @@ public class BookService {
             nl.siegmann.epublib.domain.Book ebupBook = epubReader.readEpub(fIn);
             return ebupBook.getResources().getByHref(resHref).getData();
         }
+    }
+
+    public List<Book> searchByTitle(String query) {
+        return bookRepo.findBooksByTitleContainingIgnoreCase(query);
     }
 }

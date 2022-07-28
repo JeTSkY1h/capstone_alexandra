@@ -2,11 +2,12 @@
 import {Link, } from "react-router-dom"
 import {
     Container,
-    createStyles,
+    createStyles, Group,
     Header,
     Title,
 } from "@mantine/core";
 import {UserButton} from "./UserButton/UserButton"
+import Search from "../Input/Search";
 
 
 
@@ -40,7 +41,10 @@ return (
             <Link to={"/"} className={classes.title}>
                 <Title order={1}>Alexandra</Title>
             </Link>
-            <UserButton/>
+            <Group spacing={4}>
+                <Search/>
+                <UserButton/>
+            </Group>
             {/*<Burger opened={opened} onClick={()=>toggleOpened()} className={classes.burger}/>*/}
         </Container>
      </Header>

@@ -1,21 +1,30 @@
 import { useEffect, useState } from "react"
 import Nav from "../components/Nav/Nav";
 import Books from "../components/Books/Books";
-import {getBooks, parseJwt} from "../service/apiService"
+import {getBooks, parseJwt, searchBook} from "../service/apiService"
 import { Book } from "../service/models";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 export default function Main() {
     
     const [books, setBooks] = useState<Array<Book>>();
     const [err, setErr] = useState("");
     const nav = useNavigate();
+    const {query} = useParams()
 
     useEffect(()=>{
-        getBooks().then(data=>setBooks(data)).catch(e=> {
-            console.log(e)
-            setErr(e.message);
-        })
+        if(query){
+            searchBook(query).then(data=>setBooks(data)).catch(e=> {
+                console.log(e);
+                setErr(e.message);
+            })
+        } else {
+            getBooks().then(data => setBooks(data)).catch(e => {
+                console.log(e)
+                setErr(e.message);
+            })
+        }
+
         let token = parseJwt();
         if(token.exp - (Date.now() / 1000) < 0){
             setErr("Login token is expired.")
