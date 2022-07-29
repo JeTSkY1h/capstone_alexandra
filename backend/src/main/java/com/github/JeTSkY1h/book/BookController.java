@@ -17,7 +17,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
-@EnableWebMvc
 public class BookController {
     private final BookService bookService;
 

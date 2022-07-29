@@ -6,8 +6,6 @@ import {FaSearch} from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
 
 
-
-
 export default function Search(){
     const [query, setQuery] = useState("")
     const nav = useNavigate();
