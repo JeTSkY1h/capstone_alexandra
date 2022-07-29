@@ -22,9 +22,9 @@ public class BookServiceTest {
     String sep = File.separator;
     BookRepo bookRepo = Mockito.mock(BookRepo.class);
 
-    URL localpack = getClass().getResource("");
-    String path = localpack.getPath();
-    String bookpath = path.replace("/", File.separator) + ".." + File.separator + ".." + File.separator + ".." + File.separator + "Books";
+    URL localpack = getClass().getClassLoader().getResource("Books");
+    String bookpath = localpack.getPath();
+
     BookService bookService = new BookService(bookRepo);
 
     @Test
