@@ -4,6 +4,7 @@ import Books from "../components/Books/Books";
 import {getBooks, parseJwt, searchBook} from "../service/apiService"
 import { Book } from "../service/models";
 import {useNavigate, useParams} from "react-router-dom";
+import {Box} from "@chakra-ui/react";
 
 export default function Main() {
     
@@ -33,7 +34,7 @@ export default function Main() {
     },[nav, query])
 
     return(
-        <>
+        <Box>
             <Nav/>
             <div className={"main"}>
                 {books ?  
@@ -42,6 +43,6 @@ export default function Main() {
                  <div> LOADING... </div>}
             </div>
 
-        </>
+        </Box>
     )
 }

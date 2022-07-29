@@ -1,9 +1,9 @@
 import {FormEvent, useState} from "react";
 import "./Input.css"
 import Input from "./Input";
-import {Button, Group} from "@mantine/core";
 import {FaSearch} from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
+import {Button, Flex} from "@chakra-ui/react";
 
 
 export default function Search(){
@@ -18,9 +18,9 @@ export default function Search(){
 
     return (
         <form onSubmit={handleSubmit}>
-            <Group className={"search"} spacing={0} noWrap>
+            <Flex className={"search"} gap={0} p={4}>
                <Input Value={query} setValue={setQuery} label={"Search"}/><Button style={{height: "33px"}} type={"submit"}><FaSearch/></Button>
-            </Group>
+            </Flex>
         </form>
     )
 }

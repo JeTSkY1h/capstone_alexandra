@@ -2,13 +2,13 @@ import {useNavigate, useParams} from "react-router-dom";
 import { useCallback, useEffect, useLayoutEffect, useState} from "react";
 import {getBookData, getChapter, getChapters, postBookData} from "../service/apiService";
 import {BsChevronDoubleLeft, BsChevronDoubleRight} from "react-icons/bs";
-import { FaChevronLeft} from "react-icons/fa";
+import {FaChevronLeft, FaTimes} from "react-icons/fa";
 import "./Reader.css";
 import {ResumeData} from "../service/models";
 import {UserButton} from "../components/Nav/UserButton/UserButton";
-import {useBooleanToggle, useInterval} from "@mantine/hooks";
-import {Burger, Drawer, Paper, Title, Tooltip, UnstyledButton} from "@mantine/core";
-
+import {Box, Button, Drawer, Heading, Tooltip, useBoolean} from "@chakra-ui/react";
+import {useInterval} from "@mantine/hooks";
+import {AiOutlineMenu} from "react-icons/ai";
 
 export default function Reader(){
 
@@ -16,7 +16,7 @@ export default function Reader(){
     const [resumeData, setResumeData] = useState<ResumeData>();
     const [toc, setToc] = useState<Array<string>>(["fetching Chapters"]);
     const [chapterText, setChapterText] = useState("");
-    const [drawerState, toggleDrawerState] = useBooleanToggle(false);
+    const [drawerState, toggleDrawerState] = useBoolean();
     const [currChapter, setCurrChapter] = useState(0);
     const [otherScreen, setOtherScreen] = useState(false);
     const nav = useNavigate();
@@ -181,24 +181,19 @@ useEffect(()=>{
 
     return (
         <>
-            <Drawer opened={drawerState} onClose={()=>toggleDrawerState()}>
+            <Drawer isOpen={drawerState} onClose={toggleDrawerState.toggle}>
 
                 <UserButton/>
 
                 {toc.map((chapter, i)=> {
                     return (
                         <div>
-                            <UnstyledButton onClick={()=>{
+                            <Box as="button" onClick={()=>{
                                 setCurrChapter(i)
-                                toggleDrawerState();
+                                toggleDrawerState.toggle();
                             }} className={"chapter-btn"}>
-                                <Title order={3} sx={(theme)=>({
-
-                                    '&:hover': {
-                                        color: theme.colorScheme === "dark" ? theme.colors.gray[0] : theme.colors.dark[9]
-                                    }
-                                })}>{chapter}</Title>
-                            </UnstyledButton>
+                                <Heading as={"h3"} _hover={{color: "dark.100"}} >{chapter}</Heading>
+                            </Box>
                         </div>
                     )
                 })}
@@ -209,11 +204,12 @@ useEffect(()=>{
                     <FaChevronLeft fontSize={"1rem"}/>
                 </button>
                 <Tooltip label={"Open Chapter List"}>
-              <Burger opened={drawerState}
-                      onClick={()=>toggleDrawerState()}
+              <Button onClick={()=>toggleDrawerState.toggle()}
                       title={drawerState? "close sidebar" : "open sidebar"}
                       style={{float: "right"}}
-              />
+              >
+                  {drawerState? <AiOutlineMenu/> : <FaTimes/>}
+              </Button>
                 </Tooltip>
 
 
@@ -233,7 +229,7 @@ useEffect(()=>{
 
                 <div className={otherScreen ? "reader-content blur" : "reader-content"} >
 
-                    <Paper id={"test"} onScroll={handleScroll} style={{
+                    <Box id={"test"} onScroll={handleScroll} style={{
                         position: "relative",
                         margin: "1rem",
                         paddingLeft: "2rem",
@@ -244,7 +240,7 @@ useEffect(()=>{
                         <div dangerouslySetInnerHTML={{__html: chapterText}}/>
                         {currChapter < toc.length && <button onClick={getNextChapter} className={"nextpage"}> <BsChevronDoubleRight/> </button>}
                         {currChapter > 0 && <button onClick={getPreviousChapter} className={"prevpage"}> <BsChevronDoubleLeft/> </button>}
-                    </Paper>
+                    </Box>
 
                 </div>
         </>

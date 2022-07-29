@@ -1,6 +1,6 @@
-import {Group, UnstyledButton} from "@mantine/core";
 import {rateBook} from "../../service/apiService";
 import {AiFillStar, AiOutlineStar} from "react-icons/ai";
+import {Box, Flex} from "@chakra-ui/react";
 
 interface RatingProps{
     rating: number | undefined
@@ -11,18 +11,18 @@ export const Rating = ({rating, id}: RatingProps) => {
 
     let Stars = [];
     for (let i = 1; i < 6; i++) {
-        Stars.push(<UnstyledButton
+        Stars.push(<Box as={"button"}
                 style={{color: "yellow"}}
             onClick={()=>{
             rateBook(id, i).then(data => data)
-        }}>{rating && i <= rating ? <AiFillStar/> : <AiOutlineStar/>}</UnstyledButton> )
+        }}>{rating && i <= rating ? <AiFillStar/> : <AiOutlineStar/>}</Box> )
     }
 
     return (
         <>
-            <Group spacing={0} my={8}>
+            <Flex gap={0} my={4}>
                 {Stars}
-            </Group>
+            </Flex>
         </>
     )
 }

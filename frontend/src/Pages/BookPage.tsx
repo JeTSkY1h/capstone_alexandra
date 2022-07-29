@@ -3,8 +3,8 @@ import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getBook, getBookData, getCover} from "../service/apiService";
 import {Book, ResumeData} from "../service/models";
-import { Container, Group, Image, Stack, Text, Title} from "@mantine/core";
 import {Rating} from "../components/Rating/Rating";
+import {Box, Container, Flex, Image, Stack, Text} from "@chakra-ui/react";
 
 export default function BookPage(){
     const {id} = useParams();
@@ -36,13 +36,13 @@ export default function BookPage(){
 
 
     return (
-        <>
-        <Nav/>
-            <Container fluid p={8}>
-                <Group align={"flex-start"} noWrap>
+        <Box>
+            <Nav/>
+            <Container maxW="100%" p={8}>
+                <Flex align={"flex-start"}>
                     <Image src={cover} alt={"cover"} width={300}/>
                     <Stack style={{maxWidth: "900px"}}>
-                        <Title order={1}>{book?.title}</Title>
+                        <h1 >{book?.title}</h1>
                         <Text>{book?.author}</Text>
                         {bookData &&
                             <>
@@ -53,9 +53,9 @@ export default function BookPage(){
                         {id && <Rating rating={book?.rating} id={id}></Rating>}
                         <Text>{book?.description}</Text>
                     </Stack>
-                </Group>
+                </Flex>
             </Container>
 
-        </>
+        </Box>
     )
 }
