@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,7 +20,9 @@ import java.util.regex.Pattern;
 public class BookService {
 
     private final BookRepo bookRepo;
-    private  String path = System.getProperty("user.dir") + File.separator + ".." + File.separator + "Books";
+    URL localPack = getClass().getResource("");
+    String bookpath = localPack.getPath();
+    String path = bookpath.replace("/", File.separator) + ".." + File.separator + ".." + File.separator + ".." + File.separator + ".." + File.separator + "Books";
     EpubReader epubReader = new EpubReader();
 
     public BookService(BookRepo bookRepo) {
