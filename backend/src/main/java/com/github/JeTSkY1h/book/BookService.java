@@ -20,9 +20,8 @@ import java.util.regex.Pattern;
 public class BookService {
 
     private final BookRepo bookRepo;
-    URL localPack = getClass().getResource("");
-    String bookpath = localPack.getPath();
-    String path = bookpath.replace("/", File.separator) + ".." + File.separator + ".." + File.separator + ".." + File.separator + ".." + File.separator + "Books";
+    URL localPack = getClass().getResource("Books");
+    String path = localPack.getPath();
     EpubReader epubReader = new EpubReader();
 
     public BookService(BookRepo bookRepo) {
