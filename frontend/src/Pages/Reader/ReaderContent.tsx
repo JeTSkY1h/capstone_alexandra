@@ -25,7 +25,7 @@ export default function ReaderContent({userData, setUserData, chapterText, child
 
     useEffect(()=>{
         let contentDiv = document.getElementById("content");
-        if(contentDiv && contentDiv.offsetWidth !== userData.contentWidth || contentDiv!.offsetHeight !== userData.contentHeight) setNewScreen(true);
+        if(contentDiv && (contentDiv.offsetWidth !== userData.contentWidth || contentDiv!.offsetHeight !== userData.contentHeight)) setNewScreen(true);
 
     },[userData, chapterText])
 
