@@ -6,7 +6,17 @@ import {FaChevronLeft, FaTimes} from "react-icons/fa";
 import "./Reader.css";
 import {ResumeData} from "../service/models";
 import {UserButton} from "../components/Nav/UserButton/UserButton";
-import {Box, Button, Drawer, Heading, Tooltip, useBoolean} from "@chakra-ui/react";
+import {
+    Box,
+    Button,
+    Drawer, DrawerBody,
+    DrawerCloseButton,
+    DrawerContent, DrawerHeader,
+    DrawerOverlay,
+    Heading,
+    Tooltip,
+    useBoolean
+} from "@chakra-ui/react";
 import {useInterval} from "@mantine/hooks";
 import {AiOutlineMenu} from "react-icons/ai";
 
@@ -182,21 +192,26 @@ useEffect(()=>{
     return (
         <>
             <Drawer isOpen={drawerState} onClose={toggleDrawerState.toggle}>
-
-                <UserButton/>
-
-                {toc.map((chapter, i)=> {
-                    return (
-                        <div>
-                            <Box as="button" onClick={()=>{
-                                setCurrChapter(i)
-                                toggleDrawerState.toggle();
-                            }} className={"chapter-btn"}>
-                                <Heading as={"h3"} _hover={{color: "dark.100"}} >{chapter}</Heading>
-                            </Box>
-                        </div>
-                    )
-                })}
+                <DrawerOverlay/>
+                <DrawerContent>
+                    <DrawerCloseButton/>
+                    <DrawerHeader>Chapter List</DrawerHeader>
+                    <UserButton/>
+                        <DrawerBody>
+                        {toc.map((chapter, i)=> {
+                            return (
+                                <div>
+                                    <Box as="button" onClick={()=>{
+                                        setCurrChapter(i)
+                                        toggleDrawerState.toggle();
+                                    }} className={"chapter-btn"}>
+                                        <Heading as={"h3"} _hover={{color: "dark.100"}} >{chapter}</Heading>
+                                    </Box>
+                                </div>
+                            )
+                        })}
+                        </DrawerBody>
+                </DrawerContent>
             </Drawer>
 
             <nav>
@@ -208,7 +223,7 @@ useEffect(()=>{
                       title={drawerState? "close sidebar" : "open sidebar"}
                       style={{float: "right"}}
               >
-                  {drawerState? <AiOutlineMenu/> : <FaTimes/>}
+                  {!drawerState? <AiOutlineMenu/> : <FaTimes/>}
               </Button>
                 </Tooltip>
 

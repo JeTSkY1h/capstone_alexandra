@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import {getBook, getBookData, getCover} from "../service/apiService";
 import {Book, ResumeData} from "../service/models";
 import {Rating} from "../components/Rating/Rating";
-import {Box, Container, Flex, Image, Stack, Text} from "@chakra-ui/react";
+import {Box, Container, Flex, Heading, Image, Stack, Text} from "@chakra-ui/react";
 
 export default function BookPage(){
     const {id} = useParams();
@@ -41,8 +41,8 @@ export default function BookPage(){
             <Container maxW="100%" p={8}>
                 <Flex align={"flex-start"}>
                     <Image src={cover} alt={"cover"} width={300}/>
-                    <Stack style={{maxWidth: "900px"}}>
-                        <h1 >{book?.title}</h1>
+                    <Stack style={{maxWidth: "900px"}} paddingLeft={8}>
+                        <Heading>{book?.title}</Heading>
                         <Text>{book?.author}</Text>
                         {bookData &&
                             <>

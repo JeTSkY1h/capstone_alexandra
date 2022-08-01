@@ -70,6 +70,12 @@
             <artifactId>jsoup</artifactId>
             <version>1.15.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-http42</artifactId>
+            <version>1.32.2</version>
+        </dependency>
+
 
     </dependencies>
 

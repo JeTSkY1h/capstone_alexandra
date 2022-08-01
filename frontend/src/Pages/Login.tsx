@@ -4,6 +4,7 @@ import Input from "../components/Input/Input";
 import Nav from "../components/Nav/Nav";
 import { login } from "../service/apiService";
 import "./Login.css"
+import {Heading} from "@chakra-ui/react";
 
 export default function Login(){
     const [username, setUsername] = useState("");
@@ -22,7 +23,7 @@ export default function Login(){
                 <Nav noSearch={true}/>
                 <div className="react-content-wrapper">
                     <div className="login-card">
-                        <h1>Einloggen</h1>
+                        <Heading as={"h1"}>Einloggen</Heading>
                         <form onSubmit={handleSubmit}>
                             <Input Value={username} setValue={setUsername} label={"Username"}/>
                             <Input Value={pw} setValue={setPw} label={"Password"} type="password"/>

@@ -1,4 +1,3 @@
-
 import {Link, } from "react-router-dom"
 import {UserButton} from "./UserButton/UserButton"
 import Search from "../Input/Search";
@@ -18,9 +17,9 @@ const bg = useColorModeValue("dark.100", "dark.700")
 return (
     <Box height={"56px"} background={bg}>
 
-        <Flex>
+        <Flex alignItems={"center"}>
             <Link to={"/"}>
-                <Heading as={"h1"}>Alexandra</Heading>
+                <Heading as={"h1"}> Alexandra</Heading>
             </Link>
             <Spacer/>
             <Flex gap={"4px"}>

@@ -6,8 +6,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.net.URL;
 import java.util.List;
-import java.util.Objects;
+
 
 @Data
 @Document(collection = "Books")
@@ -19,14 +20,14 @@ public class Book {
     private String title;
     private String author;
     private String description;
-    private String filePath;
+    private URL filePath;
     private List<String> genre;
     private String coverPath;
     private Integer rating;
     private Integer rated;
 
 
-    public Book(String title, String author, String filePath, List<String> genre, String coverPath) {
+    public Book(String title, String author, URL filePath, List<String> genre, String coverPath) {
         this.title = title;
         this.author = author;
         this.filePath = filePath;
