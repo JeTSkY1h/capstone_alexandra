@@ -10,7 +10,7 @@ export default function Books(props: BooksProps){
 
     return (
         <>
-            <Flex p={8}>
+            <Flex p={8} wrap={"wrap"}>
                 {props.books.map(book=>{
                     return <BookComp book={book}/>
                 })}

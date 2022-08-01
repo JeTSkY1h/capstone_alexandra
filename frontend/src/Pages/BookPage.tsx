@@ -1,7 +1,7 @@
 import Nav from "../components/Nav/Nav";
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {getBook, getBookData, getCover} from "../service/apiService";
+import {getBook, getBookUserData, getCover} from "../service/apiService";
 import {Book, ResumeData} from "../service/models";
 import {Rating} from "../components/Rating/Rating";
 import {Box, Container, Flex, Heading, Image, Stack, Text} from "@chakra-ui/react";
@@ -25,7 +25,7 @@ export default function BookPage(){
                 setCover(image);
             });
 
-            getBookData().then(data=>{
+            getBookUserData().then(data=>{
                 console.log(data);
                 let currData = data.filter((bookData: ResumeData) => bookData.bookId === id)[0]
                 console.log(currData)

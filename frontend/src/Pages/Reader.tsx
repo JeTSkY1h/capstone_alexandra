@@ -1,6 +1,6 @@
 import {useNavigate, useParams} from "react-router-dom";
-import { useCallback, useEffect, useLayoutEffect, useState} from "react";
-import {getBookData, getChapter, getChapters, postBookData} from "../service/apiService";
+import { useCallback, useLayoutEffect, useState} from "react";
+import {getBookUserData, getChapter, getChapters, postBookData} from "../service/apiService";
 import {BsChevronDoubleLeft, BsChevronDoubleRight} from "react-icons/bs";
 import {FaChevronLeft, FaTimes} from "react-icons/fa";
 import "./Reader.css";
@@ -17,7 +17,6 @@ import {
     Tooltip,
     useBoolean
 } from "@chakra-ui/react";
-import {useInterval} from "@mantine/hooks";
 import {AiOutlineMenu} from "react-icons/ai";
 
 export default function Reader(){
@@ -30,42 +29,9 @@ export default function Reader(){
     const [currChapter, setCurrChapter] = useState(0);
     const [otherScreen, setOtherScreen] = useState(false);
     const nav = useNavigate();
-    const [seconds, setSeconds] = useState(0);
-    const interval = useInterval(()=>setSeconds(s=>s+1),1000);
-
     const delay = (time: number) =>{
         return new Promise(resolve => setTimeout(resolve,time))
     }
-
-useEffect(()=>{
-    interval.start()
-    return interval.stop();
-},[interval]);
-
-    const getNewChapter =  useCallback(()=> {
-        if(id) {
-            getChapter(id, currChapter).then(data => {
-                setChapterText(data)
-            }).then(()=>{
-                let currData = resumeData;
-                 if(currData) {
-                     currData.currChapter = currChapter;
-                     currData.timeRead += seconds;
-                     setResumeData(currData);
-                     postBookData(currData).then(data=>console.log(data))
-              }
-            }).catch(()=>{
-                setChapterText("<div style='color: red'>Das Kapitel konnte nicht geladen werden</div>")
-            })
-        } else {
-            setChapterText("<div style='color: red'>Das Kapitel konnte nicht geladen werden</div>")
-        }
-        //eslint-disable-next-line
-    },[id, currChapter])
-
-    useEffect(()=>{
-        getNewChapter();
-    },[currChapter, getNewChapter])
 
     useLayoutEffect(()=>{
         const content = document.getElementById("test");
@@ -73,7 +39,7 @@ useEffect(()=>{
             getChapters(id).then(data => {
                 setToc(data)
             })
-            getBookData().then((data: ResumeData[]) => {
+            getBookUserData().then((data: ResumeData[]) => {
                 if (!data) {
                     let bookData = {
                         bookId: id,
@@ -124,6 +90,32 @@ useEffect(()=>{
         //eslint-disable-next-line
     },[id])
 
+
+    const getNewChapter =  useCallback(()=> {
+        if(id) {
+            getChapter(id, currChapter).then(data => {
+                setChapterText(data)
+            }).then(()=>{
+                let currData = resumeData;
+                if(currData) {
+                    currData.currChapter = currChapter;
+                    currData.timeRead += 0;
+                    setResumeData(currData);
+                    postBookData(currData).then(data=>console.log(data))
+                }
+            }).catch(()=>{
+                setChapterText("<div style='color: red'>Das Kapitel konnte nicht geladen werden</div>")
+            })
+        } else {
+            setChapterText("<div style='color: red'>Das Kapitel konnte nicht geladen werden</div>")
+        }
+        //eslint-disable-next-line
+    },[id, currChapter])
+
+    useLayoutEffect(()=>{
+        getNewChapter();
+    },[currChapter, getNewChapter])
+
     const firstRender = useCallback(()=>{
         if(resumeData) {
             setCurrChapter(resumeData.currChapter)
@@ -171,7 +163,7 @@ useEffect(()=>{
             const contentDiv = document.getElementById("test");
             let currData = resumeData;
             currData.contentScrollTop = contentDiv!.scrollTop;
-            currData.timeRead += seconds;
+            currData.timeRead += 0;
             setResumeData(currData);
             postBookData(currData).then(data => console.log(data));
         }

@@ -5,7 +5,7 @@ import Register from './Pages/Register';
 import Main from './Pages/Main';
 import Login from './Pages/Login';
 import BookPage from './Pages/BookPage';
-import Reader from "./Pages/Reader";
+import Reader from "./Pages/Reader/Reader"
 
 
 function App() {
