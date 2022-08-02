@@ -10,7 +10,7 @@ import {
     DrawerCloseButton,
     DrawerContent,
     DrawerHeader,
-    DrawerOverlay, filter, Flex, Spacer, Text,
+    DrawerOverlay,  Flex, Spacer, Text,
     useDisclosure
 } from "@chakra-ui/react";
 import ReaderNav from "./ReaderNav";
@@ -34,7 +34,7 @@ export default function Reader(){
         let currUserData;
         if (!userData) {
             if(!filteredData) {
-                setErr("Es gab eim Problem beim Abrufen der Buchinformationen.")
+                setErr("Es gab ein Problem beim Abrufen der Buchinformationen.")
                 return
             }
             currUserData = filteredData;
@@ -46,6 +46,7 @@ export default function Reader(){
         currUserData!.currChapter = i;
         setUserData(currUserData)
         postNewData(currUserData)
+        //eslint-disable-next-line
     },[id, userData]);
 
     useEffect(()=>{
@@ -82,7 +83,7 @@ export default function Reader(){
 
         getChapters(id).then(data=>setChapters(data)).catch(e=>setErr(e))
 
-
+        //eslint-disable-next-line
     },[id])
 
     const postNewData = (currUserData: ResumeData) => {
