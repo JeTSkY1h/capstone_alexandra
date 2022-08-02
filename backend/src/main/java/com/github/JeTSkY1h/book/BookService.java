@@ -21,8 +21,6 @@ import java.util.regex.Pattern;
 public class BookService {
 
     private final BookRepo bookRepo;
-    URL localpack = getClass().getClassLoader().getResource("Books");
-    String path = localpack.getPath();
     EpubReader epubReader = new EpubReader();
     @Value("${cloudinary.api.key}")
     private String key;
