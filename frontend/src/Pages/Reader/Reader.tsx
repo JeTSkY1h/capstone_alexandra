@@ -10,7 +10,7 @@ import {
     DrawerCloseButton,
     DrawerContent,
     DrawerHeader,
-    DrawerOverlay, Flex, Spacer, Text,
+    DrawerOverlay, filter, Flex, Spacer, Text,
     useDisclosure
 } from "@chakra-ui/react";
 import ReaderNav from "./ReaderNav";
@@ -63,14 +63,27 @@ export default function Reader(){
                 getNewChapter(filteredData.currChapter, filteredData);
             }
         ).catch(e=> {
+            let filteredData;
+            if(e.response.status === 404 || !filteredData) {
+                filteredData = {
+                    bookId: id,
+                    currChapter: 0,
+                    contentHeight: 1,
+                    contentWidth: 0,
+                    timeRead: 0,
+                    contentScrollTop: 0
+                }
+            }
+            postNewData(filteredData)
+            setUserData(filteredData)
             console.log(e)
-            setErr(e)
+            setErr(e.message)
         })
 
         getChapters(id).then(data=>setChapters(data)).catch(e=>setErr(e))
 
 
-    },[id, getNewChapter])
+    },[id])
 
     const postNewData = (currUserData: ResumeData) => {
         postBookData(currUserData).then(data => console.log(data)).catch(err => setErr(err))
