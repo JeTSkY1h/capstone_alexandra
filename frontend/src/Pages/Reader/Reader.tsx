@@ -26,6 +26,28 @@ export default function Reader(){
     const [book, setBook] = useState<Book>();
     const [chapterText, setChapterText] = useState("");
 
+    const getNewChapter = useCallback((i: number, filteredData?: ResumeData,) => {
+        if(!id){
+            setErr("Keine Buch Id gefunden")
+            return
+        }
+        let currUserData;
+        if (!userData) {
+            if(!filteredData) {
+                setErr("Es gab eim Problem beim Abrufen der Buchinformationen.")
+                return
+            }
+            currUserData = filteredData;
+        } else {
+            currUserData = userData;
+        }
+        if(isOpen) onClose();
+        getChapter( id,  i ).then(data=>setChapterText(data))
+        currUserData!.currChapter = i;
+        setUserData(currUserData)
+        postNewData(currUserData)
+    },[id, userData]);
+
     useEffect(()=>{
         if(!id) {
             setErr("es konnte keine Buch ID gefunden werden.")
@@ -48,33 +70,13 @@ export default function Reader(){
         getChapters(id).then(data=>setChapters(data)).catch(e=>setErr(e))
 
 
-    },[id])
+    },[id, getNewChapter])
 
     const postNewData = (currUserData: ResumeData) => {
         postBookData(currUserData).then(data => console.log(data)).catch(err => setErr(err))
     }
 
-    const getNewChapter = useCallback((i: number, filteredData?: ResumeData,) => {
-        if(!id){
-            setErr("Keine Buch Id gefunden")
-            return
-        }
-        let currUserData;
-        if (!userData) {
-            if(!filteredData) {
-                setErr("Es gab eim Problem beim Abrufen der Buchinformationen.")
-                return
-            }
-            currUserData = filteredData;
-        } else {
-            currUserData = userData;
-        }
-        if(isOpen) onClose();
-        getChapter( id,  i ).then(data=>setChapterText(data))
-        currUserData!.currChapter = i;
-        setUserData(currUserData)
-        postNewData(currUserData)
-    },[userData]);
+
 
     const nextChapter = () => {
         if (!userData) return
