@@ -30,9 +30,14 @@ const useStyles = createStyles((theme)=>({
     }
 }))
 
-export default function Nav(){
+interface NavProps {
+    noSearch?: boolean;
+}
 
+
+export default function Nav({noSearch}:NavProps){
     const {classes} = useStyles();
+
 
 
 return (
@@ -42,7 +47,7 @@ return (
                 <Title order={1}>Alexandra</Title>
             </Link>
             <Group spacing={4}>
-                <Search/>
+                {!noSearch && <Search/>}
                 <UserButton/>
             </Group>
             {/*<Burger opened={opened} onClick={()=>toggleOpened()} className={classes.burger}/>*/}

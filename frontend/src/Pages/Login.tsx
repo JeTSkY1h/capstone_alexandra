@@ -19,7 +19,7 @@ export default function Login(){
 
     return (
             <>  
-                <Nav />
+                <Nav noSearch={true}/>
                 <div className="react-content-wrapper">
                     <div className="login-card">
                         <h1>Einloggen</h1>

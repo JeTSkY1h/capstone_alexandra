@@ -26,7 +26,7 @@ export default function Landing(){
 
     return (
         <>
-        <Nav />
+        <Nav noSearch={true}/>
             <div className="react-content-wrapper">
                 <div className="landing-card">
                     <h1 className="landing-heading">Unendlich viele Bücher und Zeitschriften</h1>
