@@ -59,9 +59,8 @@ public class BookServiceTest {
         bookService.getById("testId123abc");
         Mockito.verify(bookRepo).findById("testId123abc");
     }
-
     @Test
-   void shouldGetCoverPicByBookId(){
+    void shouldGetCoverPicByBookId(){
         Book expectedBook = new Book();
         expectedBook.setTitle("War and Peace");
         expectedBook.setAuthor("Tolstoy, graf Leo");

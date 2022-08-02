@@ -22,7 +22,7 @@ export default function ReaderNav({title, children}: ReaderNavProps){
                     <Button><FaChevronLeft/></Button>
                 </Link>
                 <Spacer/>
-                <Heading noOfLines={1} as={"h1"}>{title}</Heading>
+                    <Heading noOfLines={1} as={"h1"}>{title}</Heading>
                 <Spacer/>
                 {children}
             </Flex>

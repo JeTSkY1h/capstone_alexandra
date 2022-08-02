@@ -26,7 +26,12 @@ export default function ReaderContent({userData, setUserData, chapterText, child
     useEffect(()=>{
         let contentDiv = document.getElementById("content");
         if(contentDiv && (contentDiv.offsetWidth !== userData.contentWidth || contentDiv!.offsetHeight !== userData.contentHeight)) setNewScreen(true);
-
+        if(!contentDiv) {
+            console.log("there was an error Loading The Book content.")
+            return
+        }
+        contentDiv.scrollTo(0, userData.contentScrollTop);
+        
     },[userData, chapterText])
 
     const postNewData = (currData: ResumeData)=>{

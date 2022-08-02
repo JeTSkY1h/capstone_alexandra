@@ -1,5 +1,5 @@
 import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {Book, ResumeData} from "../../service/models";
 import {getBook, getBookUserData, getChapter, getChapters, postBookData,} from "../../service/apiService";
 import ReaderContent from "./ReaderContent";
@@ -20,8 +20,8 @@ import {FaBars, FaChevronLeft, FaChevronRight, FaTimes} from "react-icons/fa";
 export default function Reader(){
     const {id} = useParams();
     const [userData, setUserData] = useState<ResumeData>();
-    const [chapters, setChapters] = useState<String[]>()
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const [chapters, setChapters] = useState<String[]>();
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const [err, setErr] = useState("");
     const [book, setBook] = useState<Book>();
     const [chapterText, setChapterText] = useState("");
@@ -37,36 +37,46 @@ export default function Reader(){
                 let filteredData = data.find(data => data.bookId === id)
                 if (!filteredData) filteredData = {bookId: id, currChapter: 0, contentHeight: 1, contentWidth: 0, timeRead: 0, contentScrollTop: 0}
                 setUserData(filteredData);
+                console.log(filteredData);
+                getNewChapter(filteredData.currChapter, filteredData);
             }
-        ).catch(e=>setErr(e))
+        ).catch(e=> {
+            console.log(e)
+            setErr(e)
+        })
 
         getChapters(id).then(data=>setChapters(data)).catch(e=>setErr(e))
+
+
     },[id])
 
     const postNewData = (currUserData: ResumeData) => {
         postBookData(currUserData).then(data => console.log(data)).catch(err => setErr(err))
     }
 
-    const getNewChapter = (i: number) => {
-        if(isOpen) onClose();
-        if (!userData) {
-            setErr("Es gab eim Problem beim Abrufen der Buchinformationen.")
-            return;
+    const getNewChapter = useCallback((i: number, filteredData?: ResumeData,) => {
+        if(!id){
+            setErr("Keine Buch Id gefunden")
+            return
         }
-        getChapter( id!,  i ).then(data=>setChapterText(data))
-        let currUserData = userData;
-        currUserData.currChapter = i;
+        let currUserData;
+        if (!userData) {
+            if(!filteredData) {
+                setErr("Es gab eim Problem beim Abrufen der Buchinformationen.")
+                return
+            }
+            currUserData = filteredData;
+        } else {
+            currUserData = userData;
+        }
+        if(isOpen) onClose();
+        getChapter( id,  i ).then(data=>setChapterText(data))
+        currUserData!.currChapter = i;
         setUserData(currUserData)
         postNewData(currUserData)
-    }
-
-    const scrollTop = () => {
-        let contentDiv = document.getElementById("content")
-        if (contentDiv) contentDiv.scrollTo(0, 0);
-    }
+    },[userData]);
 
     const nextChapter = () => {
-        scrollTop()
         if (!userData) return
         let currUserData = userData;
         currUserData.currChapter += 1;
@@ -77,7 +87,6 @@ export default function Reader(){
     }
 
     const prevChapter = () => {
-        scrollTop()
         if (!userData) return
         let currUserData = userData;
         currUserData.currChapter -= 1;

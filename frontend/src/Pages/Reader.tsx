@@ -55,24 +55,20 @@ export default function Reader(){
                 }
                 let bookData = data.filter((bookdata: ResumeData) => bookdata.bookId === id)[0]
 
-                if (bookData) {
-                    setResumeData(bookData)
-                    if ( content && (content.offsetWidth !== bookData.contentWidth || content.offsetHeight !== bookData.contentHeight)) {
-                            setOtherScreen(true);
-                        }
-
-                } else {
-
-                        let bookData = {
-                            bookId: id,
-                            currChapter: currChapter,
-                            contentHeight: content!.offsetHeight,
-                            contentWidth: content!.offsetWidth,
-                            contentScrollTop: content!.scrollTop,
-                            timeRead: 0,
-                        }
-                        setResumeData(bookData);
+                if(!bookData) bookData = {
+                    bookId: id,
+                    currChapter: currChapter,
+                    contentHeight: content!.offsetHeight,
+                    contentWidth: content!.offsetWidth,
+                    contentScrollTop: content!.scrollTop,
+                    timeRead: 0,
                 }
+                setResumeData(bookData)
+                setCurrChapter(bookData.currChapter)
+                if ( content && (content.offsetWidth !== bookData.contentWidth || content.offsetHeight !== bookData.contentHeight)) {
+                    setOtherScreen(true);
+                }
+
 
 
             }).catch(e=>{

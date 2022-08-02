@@ -11,8 +11,8 @@ export default function Books(props: BooksProps){
     return (
         <>
             <Flex p={8} wrap={"wrap"}>
-                {props.books.map(book=>{
-                    return <BookComp book={book}/>
+                {props.books.map((book, i)=>{
+                    return <BookComp key={"book"+ i} book={book}/>
                 })}
             </Flex>
         </>

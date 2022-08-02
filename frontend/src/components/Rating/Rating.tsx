@@ -11,7 +11,7 @@ export const Rating = ({rating, id}: RatingProps) => {
 
     let Stars = [];
     for (let i = 1; i < 6; i++) {
-        Stars.push(<Box as={"button"}
+        Stars.push(<Box key={"rating" + i + id} as={"button"}
                 style={{color: "yellow"}}
             onClick={()=>{
             rateBook(id, i).then(data => data)

@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -63,10 +61,8 @@ public class BookService {
                 try (InputStream fIn = bookFile.openStream()) {
                     nl.siegmann.epublib.domain.Book book = epubReader.readEpub(fIn);
                     Book bookRes = new Book();
-                    BufferedImage buffCoverImg = ImageIO.read(book.getCoverImage().getInputStream());
-                    File outputFile = new File(path + "/" + book.getTitle().replaceAll("[-+/\\.:'*;, ]", "") + ".png");
-                    ImageIO.write(buffCoverImg, "png", outputFile);
-                    bookRes.setCoverPath(outputFile.getAbsolutePath());
+                    Map imageUploadRes = cloudinary.uploader().upload(book.getCoverImage().getData(), ObjectUtils.emptyMap());
+                    bookRes.setCoverPath((String) imageUploadRes.get("secure_url"));
                     bookRes.setAuthor(book.getMetadata().getAuthors().get(0).toString());
                     bookRes.setFilePath(bookFile);
                     bookRes.setGenre(book.getMetadata().getSubjects());
