@@ -222,7 +222,6 @@ public class AlexandraIntegrationTest {
         );
         Assertions.assertThat(putResp.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-
         //get UserBookdata
         ResponseEntity<BookUserData[]> bookUserDataResp = restTemplate.exchange("/api/user/bookdata",
                 HttpMethod.GET,
@@ -234,9 +233,6 @@ public class AlexandraIntegrationTest {
         Assertions.assertThat(bookUserDataResp.getBody()[0]).isEqualTo(bookUserData);
 
    }
-
-
-
 
     final HttpHeaders createHeaders(String jwt) {
         String authHeaderValue = "Bearer " + jwt;

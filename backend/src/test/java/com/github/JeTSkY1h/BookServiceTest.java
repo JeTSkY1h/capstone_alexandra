@@ -588,11 +588,12 @@ public class BookServiceTest {
         Book ratedExpBook = new Book();
         ratedExpBook.setTitle(expectedBook.getTitle());
         ratedExpBook.setAuthor(expectedBook.getAuthor());
+        ratedExpBook.setFilePath(expectedBook.getFilePath());
         ratedExpBook.setGenre(expectedBook.getGenre());
         ratedExpBook.setCoverPath(expectedBook.getCoverPath());
         ratedExpBook.setDescription(expectedBook.getDescription());
-        ratedExpBook.setRated(2);
-        ratedExpBook.setRating(3);
+        ratedExpBook.setRated(1);
+        ratedExpBook.setRating(5);
         Mockito.when(bookRepo.findById("test123")).thenReturn(Optional.of(expectedBook));
         Book actual = bookService.rateBook("test123", 5);
         System.out.println(actual);
