@@ -2,33 +2,28 @@ package com.github.JeTSkY1h.book;
 
 import com.cloudinary.*;
 import com.cloudinary.utils.ObjectUtils;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import nl.siegmann.epublib.domain.*;
 import nl.siegmann.epublib.epub.EpubReader;
 import nl.siegmann.epublib.service.MediatypeService;
 import nl.siegmann.epublib.util.IOUtil;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
+@RequiredArgsConstructor
 public class BookService {
 
     private final BookRepo bookRepo;
+    private final CloudinaryService cloudinaryService;
     EpubReader epubReader = new EpubReader();
-    @Value("${cloudinary.api.key}")
-    private String key;
-    @Value("${cloudinary.api.secret}")
-    private String secret;
-    public BookService(BookRepo bookRepo) {
-        this.bookRepo = bookRepo;
-    }
     public Optional<Book> getById(String id) {
         return bookRepo.findById(id);
     }
@@ -37,29 +32,17 @@ public class BookService {
     }
 
     public List<Book> refresh() {
-        Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
-                "cloud_name", "djxtc8lav",
-                "api_key", key,
-                "api_secret", secret));
-        ArrayList<HashMap> cloudBooks;
-        List<URL> bookURLs;
+
+        List<URL> bookURLs = cloudinaryService.getBookURLs();
+
         List<Book> res = new ArrayList<>();
-        try {
-            cloudBooks = (ArrayList<HashMap>) cloudinary.api().resources(ObjectUtils.asMap("resource_type", "raw")).get("resources");
-            bookURLs = cloudBooks.stream().map(cloudBook-> {
-                try {
-                    return new URL((String) cloudBook.get("secure_url"));
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
-                }
-            }).toList();
 
             bookURLs.forEach(bookFile -> {
                 System.out.println("Test"+  bookFile.getPath());
                 try (InputStream fIn = bookFile.openStream()) {
                     nl.siegmann.epublib.domain.Book book = epubReader.readEpub(fIn);
                     Book bookRes = new Book();
-                    Map imageUploadRes = cloudinary.uploader().upload(book.getCoverImage().getData(), ObjectUtils.emptyMap());
+                    Map imageUploadRes = cloudinaryService.uploadCover(book.getCoverImage().getData());
                     bookRes.setCoverPath((String) imageUploadRes.get("secure_url"));
                     bookRes.setAuthor(book.getMetadata().getAuthors().get(0).toString());
                     bookRes.setFilePath(bookFile);
@@ -75,16 +58,12 @@ public class BookService {
                     e.printStackTrace();
                 }
             });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return res;
     }
 
     public byte[] getCoverByID(String id) throws IOException {
         Book book = getById(id).orElseThrow();
-        InputStream in = new BufferedInputStream(new FileInputStream(book.getCoverPath()));
-        return IOUtil.toByteArray(in);
+        return book.getCoverPath().getBytes();
     }
 
     public List<String> getChapters(String id) throws Exception {
