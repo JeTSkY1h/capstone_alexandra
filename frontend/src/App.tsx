@@ -6,13 +6,11 @@ import Main from './Pages/Main';
 import Login from './Pages/Login';
 import BookPage from './Pages/BookPage';
 import Reader from "./Pages/Reader/Reader"
-import UserPage from "./Pages/UserPage";
 
 
 function App() {
   return (
     <Routes>
-        <Route path="/user" element={<UserPage/>}/>
         <Route path="/" element={<Landing/>} />
         <Route path="/register" element={<Register/>} />
         <Route path="/login" element={<Login/>} />
