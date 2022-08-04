@@ -1,33 +1,51 @@
 package com.github.JeTSkY1h;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.http42.api.Response;
+import com.cloudinary.utils.ObjectUtils;
 import com.github.JeTSkY1h.book.Book;
+import com.github.JeTSkY1h.book.CloudinaryService;
 import com.github.JeTSkY1h.user.*;
 import nl.siegmann.epublib.util.IOUtil;
-import org.assertj.core.api.Assert;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Answers;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AlexandraIntegrationTest {
+
     @Autowired
     TestRestTemplate restTemplate = new TestRestTemplate();
+
+    @MockBean(answer = Answers.RETURNS_DEEP_STUBS)
+    Cloudinary cloudinary;
+
+    @MockBean
+    CloudinaryService cloudinaryService;
 
     @Autowired
     MyUserService myUserService;
 
     @Test
-    void AlexandraIntegrationtest(){
+    void AlexandraIntegrationtest() throws Exception {
 
         Assertions.assertThat(true).isEqualTo(true);
 
@@ -73,12 +91,24 @@ public class AlexandraIntegrationTest {
 
 
         //Refresh book list
+        String bookpath = System.getProperty("user.dir") + File.separator + ".." + File.separator + "Books";
+        URL bookURL = new URL(("file://" + bookpath + File.separator + "pg2600.epub").replace("/C:", "C:").replace("/", File.separator ));
+        HashMap<String, Object> secureURL = new HashMap<>();
+        secureURL.put("secure_url" ,("file://" + bookpath + File.separator + "pg2600.epub").replace("/C:", "C:").replace("/", File.separator));
+        ArrayList resources = new ArrayList<HashMap>();
+        resources.add(secureURL);
+        Map<String, Object> urlString =  Map.of("resources",  resources);
+        Mockito.when(cloudinary.api().resources(ObjectUtils.asMap("resource_type", "raw"))).thenReturn( new Response(null, urlString));
+        Mockito.when(cloudinaryService.getBookURLs()).thenReturn(List.of(bookURL));
+        Mockito.when(cloudinaryService.uploadCover(Mockito.any(byte[].class))).thenReturn(Map.of("secure_url", bookpath + File.separator + "WarAndPeace.Png"));
+
         ResponseEntity<Void> refresh = restTemplate.exchange("/api/books/refresh",
                 HttpMethod.GET,
                 new HttpEntity<>(createHeaders(jwtAdmin)),
                 Void.class
         );
         Assertions.assertThat(refresh.getStatusCode()).isEqualTo(HttpStatus.OK);
+
 
         //get books
         ResponseEntity<Book[]> books = restTemplate.exchange("/api/books",
@@ -87,10 +117,10 @@ public class AlexandraIntegrationTest {
                 Book[].class
         );
         Assertions.assertThat(books.getStatusCode()).isEqualTo(HttpStatus.OK);
-        Assertions.assertThat(books.getBody()[1].getTitle()).isEqualTo("War and Peace");
+        Assertions.assertThat(books.getBody()[0].getTitle()).isEqualTo("War and Peace");
 
         //getChapterList
-        ResponseEntity<String[]> chapters = restTemplate.exchange("/api/books/" + books.getBody()[1].getId() + "/chapter",
+        ResponseEntity<String[]> chapters = restTemplate.exchange("/api/books/" + books.getBody()[0].getId() + "/chapter",
                 HttpMethod.GET,
                 new HttpEntity<>( createHeaders(jwtAdmin)),
                 String[].class
@@ -99,7 +129,7 @@ public class AlexandraIntegrationTest {
 
 
         //getChapter
-        ResponseEntity<String> chapterText = restTemplate.exchange("/api/books/" + books.getBody()[1].getId() + "/chapter/3",
+        ResponseEntity<String> chapterText = restTemplate.exchange("/api/books/" + books.getBody()[0].getId() + "/chapter/3",
                 HttpMethod.GET,
                 new HttpEntity<>(createHeaders(jwtAdmin)),
                 String.class
@@ -116,9 +146,9 @@ public class AlexandraIntegrationTest {
                         <meta http-equiv="Content-Style-Type" content="text/css"/>
                         <title>The Project Gutenberg eBook of War and Peace, by Leo Tolstoy</title>
                         <link rel="icon" href="3465067894307608174_cover.jpg" type="image/x-cover"/>
-                                  
-                                  
-                                  
+
+
+
                         <link href="0.css" rel="stylesheet" type="text/css"/>
                         <link href="1.css" rel="stylesheet" type="text/css"/>
                         <link href="pgepub.css" rel="stylesheet" type="text/css"/>
@@ -173,19 +203,15 @@ public class AlexandraIntegrationTest {
                         """);
 
         //getCover image
-        ResponseEntity<byte[]> coverPic = restTemplate.exchange("/api/books/cover/" + books.getBody()[1].getId(),
+        ResponseEntity<byte[]> coverPic = restTemplate.exchange("/api/books/cover/" + books.getBody()[0].getId(),
                 HttpMethod.GET,
                 new HttpEntity<>(createHeaders(jwtAdmin)),
                 byte[].class
         );
-        byte[] expected;
-        try(InputStream in = new BufferedInputStream(new FileInputStream(books.getBody()[1].getCoverPath()))) {
-            expected = IOUtil.toByteArray(in);
-            Assertions.assertThat(coverPic.getBody()).isEqualTo(expected);
-        } catch(Exception e) {
-            e.printStackTrace();
-            fail();
-        }
+
+       byte[] expCoverPic = books.getBody()[0].getCoverPath().getBytes();
+       Assertions.assertThat(coverPic.getStatusCode()).isEqualTo(HttpStatus.OK);
+       Assertions.assertThat(coverPic.getBody()).isEqualTo(expCoverPic);
 
         //set UserBookData
         BookUserData bookUserData = new BookUserData("test123", 200, 200, 200, 3, 34);
@@ -195,7 +221,6 @@ public class AlexandraIntegrationTest {
                 BookUserData[].class
         );
         Assertions.assertThat(putResp.getStatusCode()).isEqualTo(HttpStatus.OK);
-
 
         //get UserBookdata
         ResponseEntity<BookUserData[]> bookUserDataResp = restTemplate.exchange("/api/user/bookdata",
@@ -208,9 +233,6 @@ public class AlexandraIntegrationTest {
         Assertions.assertThat(bookUserDataResp.getBody()[0]).isEqualTo(bookUserData);
 
    }
-
-
-
 
     final HttpHeaders createHeaders(String jwt) {
         String authHeaderValue = "Bearer " + jwt;

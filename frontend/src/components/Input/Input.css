@@ -32,6 +32,7 @@
 
 .search > .my-input-wrapper {
     height: 2rem;
+    margin: 0;
 }
 
 .search > .my-input-wrapper label {

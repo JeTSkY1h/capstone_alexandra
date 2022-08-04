@@ -1,14 +1,23 @@
 import {useNavigate, useParams} from "react-router-dom";
-import { useCallback, useEffect, useLayoutEffect, useState} from "react";
-import {getBookData, getChapter, getChapters, postBookData} from "../service/apiService";
+import { useCallback, useLayoutEffect, useState} from "react";
+import {getBookUserData, getChapter, getChapters, postBookData} from "../service/apiService";
 import {BsChevronDoubleLeft, BsChevronDoubleRight} from "react-icons/bs";
-import { FaChevronLeft} from "react-icons/fa";
+import {FaChevronLeft, FaTimes} from "react-icons/fa";
 import "./Reader.css";
 import {ResumeData} from "../service/models";
 import {UserButton} from "../components/Nav/UserButton/UserButton";
-import {useBooleanToggle, useInterval} from "@mantine/hooks";
-import {Burger, Drawer, Paper, Title, Tooltip, UnstyledButton} from "@mantine/core";
-
+import {
+    Box,
+    Button,
+    Drawer, DrawerBody,
+    DrawerCloseButton,
+    DrawerContent, DrawerHeader,
+    DrawerOverlay,
+    Heading,
+    Tooltip,
+    useBoolean
+} from "@chakra-ui/react";
+import {AiOutlineMenu} from "react-icons/ai";
 
 export default function Reader(){
 
@@ -16,46 +25,13 @@ export default function Reader(){
     const [resumeData, setResumeData] = useState<ResumeData>();
     const [toc, setToc] = useState<Array<string>>(["fetching Chapters"]);
     const [chapterText, setChapterText] = useState("");
-    const [drawerState, toggleDrawerState] = useBooleanToggle(false);
+    const [drawerState, toggleDrawerState] = useBoolean();
     const [currChapter, setCurrChapter] = useState(0);
     const [otherScreen, setOtherScreen] = useState(false);
     const nav = useNavigate();
-    const [seconds, setSeconds] = useState(0);
-    const interval = useInterval(()=>setSeconds(s=>s+1),1000);
-
     const delay = (time: number) =>{
         return new Promise(resolve => setTimeout(resolve,time))
     }
-
-useEffect(()=>{
-    interval.start()
-    return interval.stop();
-},[interval]);
-
-    const getNewChapter =  useCallback(()=> {
-        if(id) {
-            getChapter(id, currChapter).then(data => {
-                setChapterText(data)
-            }).then(()=>{
-                let currData = resumeData;
-                 if(currData) {
-                     currData.currChapter = currChapter;
-                     currData.timeRead += seconds;
-                     setResumeData(currData);
-                     postBookData(currData).then(data=>console.log(data))
-              }
-            }).catch(()=>{
-                setChapterText("<div style='color: red'>Das Kapitel konnte nicht geladen werden</div>")
-            })
-        } else {
-            setChapterText("<div style='color: red'>Das Kapitel konnte nicht geladen werden</div>")
-        }
-        //eslint-disable-next-line
-    },[id, currChapter])
-
-    useEffect(()=>{
-        getNewChapter();
-    },[currChapter, getNewChapter])
 
     useLayoutEffect(()=>{
         const content = document.getElementById("test");
@@ -63,7 +39,7 @@ useEffect(()=>{
             getChapters(id).then(data => {
                 setToc(data)
             })
-            getBookData().then((data: ResumeData[]) => {
+            getBookUserData().then((data: ResumeData[]) => {
                 if (!data) {
                     let bookData = {
                         bookId: id,
@@ -79,24 +55,20 @@ useEffect(()=>{
                 }
                 let bookData = data.filter((bookdata: ResumeData) => bookdata.bookId === id)[0]
 
-                if (bookData) {
-                    setResumeData(bookData)
-                    if ( content && (content.offsetWidth !== bookData.contentWidth || content.offsetHeight !== bookData.contentHeight)) {
-                            setOtherScreen(true);
-                        }
-
-                } else {
-
-                        let bookData = {
-                            bookId: id,
-                            currChapter: currChapter,
-                            contentHeight: content!.offsetHeight,
-                            contentWidth: content!.offsetWidth,
-                            contentScrollTop: content!.scrollTop,
-                            timeRead: 0,
-                        }
-                        setResumeData(bookData);
+                if(!bookData) bookData = {
+                    bookId: id,
+                    currChapter: currChapter,
+                    contentHeight: content!.offsetHeight,
+                    contentWidth: content!.offsetWidth,
+                    contentScrollTop: content!.scrollTop,
+                    timeRead: 0,
                 }
+                setResumeData(bookData)
+                setCurrChapter(bookData.currChapter)
+                if ( content && (content.offsetWidth !== bookData.contentWidth || content.offsetHeight !== bookData.contentHeight)) {
+                    setOtherScreen(true);
+                }
+
 
 
             }).catch(e=>{
@@ -113,6 +85,32 @@ useEffect(()=>{
         }
         //eslint-disable-next-line
     },[id])
+
+
+    const getNewChapter =  useCallback(()=> {
+        if(id) {
+            getChapter(id, currChapter).then(data => {
+                setChapterText(data)
+            }).then(()=>{
+                let currData = resumeData;
+                if(currData) {
+                    currData.currChapter = currChapter;
+                    currData.timeRead += 0;
+                    setResumeData(currData);
+                    postBookData(currData).then(data=>console.log(data))
+                }
+            }).catch(()=>{
+                setChapterText("<div style='color: red'>Das Kapitel konnte nicht geladen werden</div>")
+            })
+        } else {
+            setChapterText("<div style='color: red'>Das Kapitel konnte nicht geladen werden</div>")
+        }
+        //eslint-disable-next-line
+    },[id, currChapter])
+
+    useLayoutEffect(()=>{
+        getNewChapter();
+    },[currChapter, getNewChapter])
 
     const firstRender = useCallback(()=>{
         if(resumeData) {
@@ -161,7 +159,7 @@ useEffect(()=>{
             const contentDiv = document.getElementById("test");
             let currData = resumeData;
             currData.contentScrollTop = contentDiv!.scrollTop;
-            currData.timeRead += seconds;
+            currData.timeRead += 0;
             setResumeData(currData);
             postBookData(currData).then(data => console.log(data));
         }
@@ -181,27 +179,27 @@ useEffect(()=>{
 
     return (
         <>
-            <Drawer opened={drawerState} onClose={()=>toggleDrawerState()}>
-
-                <UserButton/>
-
-                {toc.map((chapter, i)=> {
-                    return (
-                        <div>
-                            <UnstyledButton onClick={()=>{
-                                setCurrChapter(i)
-                                toggleDrawerState();
-                            }} className={"chapter-btn"}>
-                                <Title order={3} sx={(theme)=>({
-
-                                    '&:hover': {
-                                        color: theme.colorScheme === "dark" ? theme.colors.gray[0] : theme.colors.dark[9]
-                                    }
-                                })}>{chapter}</Title>
-                            </UnstyledButton>
-                        </div>
-                    )
-                })}
+            <Drawer isOpen={drawerState} onClose={toggleDrawerState.toggle}>
+                <DrawerOverlay/>
+                <DrawerContent>
+                    <DrawerCloseButton/>
+                    <DrawerHeader>Chapter List</DrawerHeader>
+                    <UserButton/>
+                        <DrawerBody>
+                        {toc.map((chapter, i)=> {
+                            return (
+                                <div>
+                                    <Box as="button" onClick={()=>{
+                                        setCurrChapter(i)
+                                        toggleDrawerState.toggle();
+                                    }} className={"chapter-btn"}>
+                                        <Heading as={"h3"} _hover={{color: "dark.100"}} >{chapter}</Heading>
+                                    </Box>
+                                </div>
+                            )
+                        })}
+                        </DrawerBody>
+                </DrawerContent>
             </Drawer>
 
             <nav>
@@ -209,11 +207,12 @@ useEffect(()=>{
                     <FaChevronLeft fontSize={"1rem"}/>
                 </button>
                 <Tooltip label={"Open Chapter List"}>
-              <Burger opened={drawerState}
-                      onClick={()=>toggleDrawerState()}
+              <Button onClick={()=>toggleDrawerState.toggle()}
                       title={drawerState? "close sidebar" : "open sidebar"}
                       style={{float: "right"}}
-              />
+              >
+                  {!drawerState? <AiOutlineMenu/> : <FaTimes/>}
+              </Button>
                 </Tooltip>
 
 
@@ -233,7 +232,7 @@ useEffect(()=>{
 
                 <div className={otherScreen ? "reader-content blur" : "reader-content"} >
 
-                    <Paper id={"test"} onScroll={handleScroll} style={{
+                    <Box id={"test"} onScroll={handleScroll} style={{
                         position: "relative",
                         margin: "1rem",
                         paddingLeft: "2rem",
@@ -244,7 +243,7 @@ useEffect(()=>{
                         <div dangerouslySetInnerHTML={{__html: chapterText}}/>
                         {currChapter < toc.length && <button onClick={getNextChapter} className={"nextpage"}> <BsChevronDoubleRight/> </button>}
                         {currChapter > 0 && <button onClick={getPreviousChapter} className={"prevpage"}> <BsChevronDoubleLeft/> </button>}
-                    </Paper>
+                    </Box>
 
                 </div>
         </>

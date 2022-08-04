@@ -21,7 +21,7 @@ export function postBookData(bookData: ResumeData){
     return axios.put("/api/user/bookdata", bookData, requestConfig()).then(res=>res.data)
 }
 
-export function getBookData(){
+export function getBookUserData(){
     return axios.get("/api/user/bookdata", requestConfig()).then(res=>res.data)
 }
 

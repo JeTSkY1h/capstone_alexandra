@@ -1,34 +1,10 @@
-
 import {Link, } from "react-router-dom"
-import {
-    Container,
-    createStyles, Group,
-    Header,
-    Title,
-} from "@mantine/core";
 import {UserButton} from "./UserButton/UserButton"
 import Search from "../Input/Search";
+import {Box, Divider, Flex, Heading, Spacer, useColorModeValue} from "@chakra-ui/react";
 
 
 
-const useStyles = createStyles((theme)=>({
-    header: {
-        paddingLeft: theme.spacing.md,
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        height: "100%",
-    },
-    burger: {
-        [theme.fn.largerThan('xs')]: {
-            display: 'none',
-        },
-    },
-    title: {
-        color: theme.colorScheme === "dark" ? theme.colors.gray[0] : theme.colors.dark[9],
-        textDecoration: "none",
-    }
-}))
 
 interface NavProps {
     noSearch?: boolean;
@@ -36,23 +12,24 @@ interface NavProps {
 
 
 export default function Nav({noSearch}:NavProps){
-    const {classes} = useStyles();
-
-
+const bg = useColorModeValue("dark.100", "dark.700")
 
 return (
-    <Header height={56} >
-        <Container className={classes.header} fluid>
-            <Link to={"/"} className={classes.title}>
-                <Title order={1}>Alexandra</Title>
+    <Box height={"56px"} background={bg}>
+
+        <Flex alignItems={"center"}>
+            <Link to={"/"}>
+                <Heading as={"h1"}> Alexandra</Heading>
             </Link>
-            <Group spacing={4}>
+            <Spacer/>
+            <Flex gap={"4px"}>
                 {!noSearch && <Search/>}
                 <UserButton/>
-            </Group>
+            </Flex>
             {/*<Burger opened={opened} onClick={()=>toggleOpened()} className={classes.burger}/>*/}
-        </Container>
-     </Header>
+        </Flex>
+        <Divider/>
+     </Box>
  )
 
 }
