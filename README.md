@@ -1,3 +1,4 @@
 # Alexandra
 ---
-Online library
+
+Alexandra is an Online Library wich renders Epub files. 
