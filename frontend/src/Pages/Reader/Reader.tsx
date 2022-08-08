@@ -90,8 +90,6 @@ export default function Reader(){
         postBookData(currUserData).then(data => console.log(data)).catch(err => setErr(err))
     }
 
-
-
     const nextChapter = () => {
         if (!userData) return
         let currUserData = userData;
@@ -125,7 +123,13 @@ export default function Reader(){
                         <DrawerHeader>Chapters</DrawerHeader>
                         <DrawerBody>
                             <>
-                                {chapters.map((c, i) => <Text onClick={() => getNewChapter(i)}>{c}</Text>)}
+                                {chapters.map((c, i) => <Text onClick={() => {
+                                    getNewChapter(i)
+                                    let currUserData = userData;
+                                    currUserData!.contentScrollTop = 0;
+                                    setUserData(currUserData);
+                                    onClose();
+                                }} >{c}</Text>)}
                             </>
                         </DrawerBody>
                     </DrawerContent>
@@ -136,7 +140,6 @@ export default function Reader(){
             {book && <ReaderNav title={book?.title}>
                 <Button onClick={onOpen}>{isOpen ? <FaTimes/> : <FaBars/>}</Button>
             </ReaderNav>}
-
 
             {userData && chapters && chapterText &&
                 <ReaderContent chapterText={chapterText} setUserData={setUserData} userData={userData}>
