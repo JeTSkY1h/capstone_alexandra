@@ -15,22 +15,21 @@ export default function BookComp(props: BookProps){
 
 
     return (
-            <Box background={bg} width={"144px"} borderRadius={"5px"}  shadow={"lg"} m={"1rem"}>
-                <Link to={"/book/" + props.book.id}>
-                <Image width={"100%"} src={props.book.coverPath} height={220} fit={"cover"}/>
-                </Link>
-                <Box p={2}>
-                    <Tooltip label={props.book.title}>
-                        <Text size={"sm"} noOfLines={1} my={"8px"}>
-                            {props.book.title}
-                        </Text>
-                    </Tooltip>
-                    <Rating id={props.book.id} rating={props.book.rating}/>
-                    <Button onClick={()=>nav("/reader/" + props.book.id)}>
-                        Read
-                    </Button>
-                </Box>
+        <Box pos={"relative"} flexGrow={0} flexShrink={0} background={bg} width={"144px"} borderRadius={"5px"}  shadow={"lg"} m={"1rem"}>
+            <Link to={"/book/" + props.book.id}><Image width={"100%"} src={props.book.coverPath} fit={"cover"}/>
+            </Link>
+            <Box p={2}>
+                <Tooltip label={props.book.title}>
+                    <Text size={"sm"} noOfLines={1} my={"8px"}>
+                        {props.book.title}
+                    </Text>
+                </Tooltip>
+                <Rating id={props.book.id} rating={props.book.rating}/>
+                <Button bottom={"1rem"} onClick={()=>nav("/reader/" + props.book.id)}>
+                    Read
+                </Button>
             </Box>
+        </Box>
 
     )
 }

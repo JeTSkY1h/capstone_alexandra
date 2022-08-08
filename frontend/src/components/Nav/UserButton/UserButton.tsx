@@ -6,11 +6,8 @@ import {Box, Button, Tooltip, Text, IconButton, Flex} from "@chakra-ui/react";
 export const UserButton = () => {
     const nav = useNavigate();
 
-
-
     return (
         <>
-
             {!localStorage.getItem("jwt-alexandra") ?
                 <Tooltip label={"Login"}>
                     <Button onClick={() => nav("/login")}>Login</Button>
